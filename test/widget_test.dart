@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:circa_app/screens/intro_screen.dart';
+import 'package:circa_app/screens/onboarding/intro_screen.dart';
 
 void main() {
   testWidgets('IntroScreen initial display and buttons test', (WidgetTester tester) async {

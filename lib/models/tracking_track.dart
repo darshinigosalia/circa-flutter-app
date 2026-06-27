@@ -1,0 +1,4 @@
+enum TrackingTrack {
+  periods,
+  noperiods,
+}

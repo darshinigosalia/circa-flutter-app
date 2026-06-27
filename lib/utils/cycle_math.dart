@@ -17,23 +17,23 @@ class CycleMath {
     return bNormalized.difference(aNormalized).inDays;
   }
 
-  static int getDayInCycle(DateTime lmp, DateTime today, int cycleLength) {
+  static int getDayInCycle(DateTime lmp, DateTime today, int cycleLengthInDays) {
     final elapsed = daysBetween(lmp, today);
-    return ((elapsed % cycleLength) + cycleLength) % cycleLength + 1;
+    return ((elapsed % cycleLengthInDays) + cycleLengthInDays) % cycleLengthInDays + 1;
   }
 
-  static DateTime getNextPeriod(DateTime lmp, DateTime today, int cycleLength) {
+  static DateTime getNextPeriod(DateTime lmp, DateTime today, int cycleLengthInDays) {
     final elapsed = daysBetween(lmp, today);
-    final cyclesPassed = (elapsed / cycleLength).floor();
-    return lmp.add(Duration(days: (cyclesPassed + 1) * cycleLength));
+    final cyclesPassed = (elapsed / cycleLengthInDays).floor();
+    return lmp.add(Duration(days: (cyclesPassed + 1) * cycleLengthInDays));
   }
 
-  static int getOvulationDay(int cycleLength) {
-    return cycleLength - 14;
+  static int getOvulationDay(int cycleLengthInDays) {
+    return cycleLengthInDays - 14;
   }
 
-  static PhaseInfo getPhase(int dayInCycle, int cycleLength) {
-    final ovDay = getOvulationDay(cycleLength);
+  static PhaseInfo getPhase(int dayInCycle, int cycleLengthInDays) {
+    final ovDay = getOvulationDay(cycleLengthInDays);
     
     if (dayInCycle <= defaultPeriodLength) {
       return PhaseInfo("Menstrual", "Your period; rest and be gentle with yourself.");
@@ -46,18 +46,18 @@ class CycleMath {
     }
   }
 
-  static bool isFertileWindow(DateTime date, DateTime lmp, int cycleLength) {
-    final dayInCycle = getDayInCycle(lmp, date, cycleLength);
-    final ovDay = getOvulationDay(cycleLength);
+  static bool isFertileWindow(DateTime date, DateTime lmp, int cycleLengthInDays) {
+    final dayInCycle = getDayInCycle(lmp, date, cycleLengthInDays);
+    final ovDay = getOvulationDay(cycleLengthInDays);
     return dayInCycle >= (ovDay - 3) && dayInCycle <= (ovDay + 1);
   }
 
-  static bool isOvulationDay(DateTime date, DateTime lmp, int cycleLength) {
-    final dayInCycle = getDayInCycle(lmp, date, cycleLength);
-    return dayInCycle == getOvulationDay(cycleLength);
+  static bool isOvulationDay(DateTime date, DateTime lmp, int cycleLengthInDays) {
+    final dayInCycle = getDayInCycle(lmp, date, cycleLengthInDays);
+    return dayInCycle == getOvulationDay(cycleLengthInDays);
   }
 
-  static bool isPredictedPeriod(DateTime date, DateTime lmp, int cycleLength) {
+  static bool isPredictedPeriod(DateTime date, DateTime lmp, int cycleLengthInDays) {
     final today = DateTime(AppClock.now().year, AppClock.now().month, AppClock.now().day);
     final normDate = DateTime(date.year, date.month, date.day);
     
@@ -66,7 +66,7 @@ class CycleMath {
       return false;
     }
 
-    final dayInCycle = getDayInCycle(lmp, normDate, cycleLength);
+    final dayInCycle = getDayInCycle(lmp, normDate, cycleLengthInDays);
     return dayInCycle >= 1 && dayInCycle <= defaultPeriodLength;
   }
 

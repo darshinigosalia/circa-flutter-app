@@ -1,9 +1,11 @@
+import 'tracking_track.dart';
+
 class CycleProfile {
-  final String track;
+  final TrackingTrack track;
   final DateTime? lastPeriod;
-  final int cycleLength;
-  final bool fertile;
-  final bool pregnant;
+  final int cycleLengthInDays;
+  final bool isFertile;
+  final bool isPregnant;
   
   // Non-pregnant / no-periods fields
   final List<String> hormones;
@@ -15,9 +17,9 @@ class CycleProfile {
   CycleProfile({
     required this.track,
     this.lastPeriod,
-    this.cycleLength = 28,
-    required this.fertile,
-    this.pregnant = false,
+    this.cycleLengthInDays = 28,
+    required this.isFertile,
+    this.isPregnant = false,
     this.hormones = const [],
     this.anchor,
     this.symptomsToTrack = const [],
@@ -27,11 +29,11 @@ class CycleProfile {
 
   Map<String, dynamic> toJson() {
     return {
-      'track': track,
+      'track': track.name,
       'lastPeriod': lastPeriod?.toIso8601String(),
-      'cycleLength': cycleLength,
-      'fertile': fertile,
-      'pregnant': pregnant,
+      'cycleLength': cycleLengthInDays,
+      'fertile': isFertile,
+      'pregnant': isPregnant,
       'hormones': hormones,
       'anchor': anchor,
       'symptomsToTrack': symptomsToTrack,
@@ -42,11 +44,14 @@ class CycleProfile {
 
   factory CycleProfile.fromJson(Map<String, dynamic> json) {
     return CycleProfile(
-      track: json['track'],
+      track: TrackingTrack.values.firstWhere(
+        (e) => e.name == json['track'],
+        orElse: () => TrackingTrack.periods,
+      ),
       lastPeriod: json['lastPeriod'] != null ? DateTime.parse(json['lastPeriod']) : null,
-      cycleLength: json['cycleLength'] ?? 28,
-      fertile: json['fertile'] ?? false,
-      pregnant: json['pregnant'] ?? false,
+      cycleLengthInDays: json['cycleLength'] ?? 28,
+      isFertile: json['fertile'] ?? false,
+      isPregnant: json['pregnant'] ?? false,
       hormones: List<String>.from(json['hormones'] ?? []),
       anchor: json['anchor'] as Map<String, dynamic>?,
       symptomsToTrack: List<String>.from(json['symptomsToTrack'] ?? []),
@@ -56,11 +61,11 @@ class CycleProfile {
   }
 
   CycleProfile copyWith({
-    String? track,
+    TrackingTrack? track,
     DateTime? lastPeriod,
-    int? cycleLength,
-    bool? fertile,
-    bool? pregnant,
+    int? cycleLengthInDays,
+    bool? isFertile,
+    bool? isPregnant,
     List<String>? hormones,
     Map<String, dynamic>? anchor,
     List<String>? symptomsToTrack,
@@ -70,9 +75,9 @@ class CycleProfile {
     return CycleProfile(
       track: track ?? this.track,
       lastPeriod: lastPeriod ?? this.lastPeriod,
-      cycleLength: cycleLength ?? this.cycleLength,
-      fertile: fertile ?? this.fertile,
-      pregnant: pregnant ?? this.pregnant,
+      cycleLengthInDays: cycleLengthInDays ?? this.cycleLengthInDays,
+      isFertile: isFertile ?? this.isFertile,
+      isPregnant: isPregnant ?? this.isPregnant,
       hormones: hormones ?? this.hormones,
       anchor: anchor ?? this.anchor,
       symptomsToTrack: symptomsToTrack ?? this.symptomsToTrack,

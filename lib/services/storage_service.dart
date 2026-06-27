@@ -109,10 +109,10 @@ class StorageService extends ChangeNotifier {
       if (log.periodStarted && (_profile!.lastPeriod == null || normalizedDate.isAfter(_profile!.lastPeriod!))) {
         await saveProfile(_profile!.copyWith(
           lastPeriod: normalizedDate,
-          cycleLength: newLength,
+          cycleLengthInDays: newLength,
         ));
-      } else if (newLength != _profile!.cycleLength) {
-        await saveProfile(_profile!.copyWith(cycleLength: newLength));
+      } else if (newLength != _profile!.cycleLengthInDays) {
+        await saveProfile(_profile!.copyWith(cycleLengthInDays: newLength));
       }
     }
     

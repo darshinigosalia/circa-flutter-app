@@ -1,8 +1,10 @@
+import 'tracking_track.dart';
+
 class OnboardingData {
-  final String? track;
-  final bool? pregnant;
+  final TrackingTrack? track;
+  final bool? isPregnant;
   final DateTime? lastPeriod;
-  final bool? fertile;
+  final bool? isFertile;
   final List<String>? hormones;
   final Map<String, dynamic>? anchor;
   final List<String>? symptomsToTrack;
@@ -10,9 +12,9 @@ class OnboardingData {
 
   const OnboardingData({
     this.track,
-    this.pregnant,
+    this.isPregnant,
     this.lastPeriod,
-    this.fertile,
+    this.isFertile,
     this.hormones,
     this.anchor,
     this.symptomsToTrack,
@@ -20,10 +22,10 @@ class OnboardingData {
   });
 
   OnboardingData copyWith({
-    String? track,
-    bool? pregnant,
+    TrackingTrack? track,
+    bool? isPregnant,
     DateTime? lastPeriod,
-    bool? fertile,
+    bool? isFertile,
     List<String>? hormones,
     Map<String, dynamic>? anchor,
     List<String>? symptomsToTrack,
@@ -31,9 +33,9 @@ class OnboardingData {
   }) {
     return OnboardingData(
       track: track ?? this.track,
-      pregnant: pregnant ?? this.pregnant,
+      isPregnant: isPregnant ?? this.isPregnant,
       lastPeriod: lastPeriod ?? this.lastPeriod,
-      fertile: fertile ?? this.fertile,
+      isFertile: isFertile ?? this.isFertile,
       hormones: hormones ?? this.hormones,
       anchor: anchor ?? this.anchor,
       symptomsToTrack: symptomsToTrack ?? this.symptomsToTrack,
