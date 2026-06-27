@@ -40,32 +40,32 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
 
   static const List<IntroPage> _pages = [
     IntroPage(sentences: [
-      IntroSentence(sentence: "Hi.", gap: 500),
+      IntroSentence(sentence: "Hi.", gap: 1000),
       IntroSentence(sentence: "We're really glad you're here.", gap: 0),
     ]),
     IntroPage(sentences: [
-      IntroSentence(sentence: "your hormones and your cycles", gap: 500),
+      IntroSentence(sentence: "your hormones and your cycles", gap: 1000),
       IntroSentence(sentence: "together tell one story", gap: 0),
     ]),
     IntroPage(sentences: [
-      IntroSentence(sentence: "When you notice how you feel,", gap: 500),
-      IntroSentence(sentence: "you begin to understand your body's rhythm,", gap: 500),
+      IntroSentence(sentence: "When you notice how you feel,", gap: 1000),
+      IntroSentence(sentence: "you begin to understand your body's rhythm,", gap: 1000),
       IntroSentence(sentence: "whether you bleed, or not.", gap: 0),
     ]),
     IntroPage(sentences: [
-      IntroSentence(sentence: "Circa is for anyone navigating periods, hormones, or cycles", gap: 500),
+      IntroSentence(sentence: "Circa is for anyone navigating periods, hormones, or cycles", gap: 1000),
       IntroSentence(sentence: "no matter how you identify.", gap: 0),
     ]),
     IntroPage(sentences: [
-      IntroSentence(sentence: "Private. First, and always.", gap: 500),
-      IntroSentence(sentence: "Stored safely on your own device.", gap: 500),
-      IntroSentence(sentence: "No accounts, no ads, no data selling.", gap: 500),
+      IntroSentence(sentence: "Private. First, and always.", gap: 1000),
+      IntroSentence(sentence: "Stored safely on your own device.", gap: 1000),
+      IntroSentence(sentence: "No accounts, no ads, no data selling.", gap: 1000),
       IntroSentence(sentence: "And completely free.", gap: 0),
     ]),
     IntroPage(sentences: [
-      IntroSentence(sentence: "However your body moves through time,", gap: 500),
-      IntroSentence(sentence: "we'll follow along", gap: 500),
-      IntroSentence(sentence: "gently, and", gap: 500),
+      IntroSentence(sentence: "However your body moves through time,", gap: 1000),
+      IntroSentence(sentence: "we'll follow along", gap: 1000),
+      IntroSentence(sentence: "gently, and", gap: 1000),
       IntroSentence(sentence: "always at your pace.", gap: 0),
     ]),
   ];
