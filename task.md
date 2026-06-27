@@ -1,0 +1,6 @@
+- `[x]` Task 1: Create `resolveHome` in `lib/utils/route_resolver.dart`
+- `[x]` Task 2: Implement Settings Box and Data Deletion in `lib/services/storage_service.dart`
+- `[x]` Task 3: Update `lib/main.dart` to use `resolveHome` and initialize Settings box
+- `[x]` Task 4: Expand the Side Drawer in `lib/screens/components.dart`
+- `[x]` Task 5: Build `SettingsScreen` and data deletion UI in `lib/screens/settings_screen.dart`
+- `[x]` Task 6: Refactor `go home` everywhere to use `resolveHome`
