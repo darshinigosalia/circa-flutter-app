@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../models/day_log.dart';
-import '../models/cycle_profile.dart';
+import '../models/user_profile.dart';
 import '../models/medication.dart';
 import '../models/appointment.dart';
 import '../utils/cycle_extractor.dart';
@@ -19,7 +19,7 @@ class StorageService extends ChangeNotifier {
   static const String _boxSettings = 'settings';
   
   final Map<String, DayLog> _logs = {}; // Keyed by YYYY-MM-DD
-  CycleProfile? _profile;
+  UserProfile? _profile;
   
   bool _initialized = false;
   bool get isInitialized => _initialized;
@@ -42,24 +42,24 @@ class StorageService extends ChangeNotifier {
     // Load profile
     final profileJson = profileBox.get(_profileKey);
     if (profileJson != null) {
-      _profile = CycleProfile.fromJson(jsonDecode(profileJson));
+      _profile = UserProfile.fromJson(jsonDecode(profileJson));
     }
     
     _initialized = true;
     notifyListeners();
   }
 
-  CycleProfile? get profile => _profile;
+  UserProfile? get profile => _profile;
   DateTime? get mostRecentPeriodStart => _profile?.lastPeriod;
 
-  Future<void> saveProfile(CycleProfile profile) async {
+  Future<void> saveProfile(UserProfile profile) async {
     _profile = profile;
     final profileBox = Hive.box<String>(_boxProfile);
     await profileBox.put(_profileKey, jsonEncode(profile.toJson()));
     notifyListeners();
   }
 
-  Future<void> seedFromOnboarding(CycleProfile profile) async {
+  Future<void> seedFromOnboarding(UserProfile profile) async {
     await saveProfile(profile);
     
     if (profile.lastPeriod != null) {

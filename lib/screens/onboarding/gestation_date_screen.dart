@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
-import '../../models/cycle_profile.dart';
+import '../../models/user_profile.dart';
 import '../../models/tracking_track.dart';
 import '../../services/storage_service.dart';
 import '../common/components.dart';
@@ -117,7 +117,7 @@ class _GestationDateScreenState extends State<GestationDateScreen> {
                 onPressed: _selectedDate == null ? null : () async {
                   final storage = storageService;
                   // Await saving to hive
-                  final profile = CycleProfile(
+                  final profile = UserProfile(
                     track: widget.data.track ?? TrackingTrack.noperiods,
                     isPregnant: widget.data.isPregnant ?? true,
                     lastPeriod: _selectedDate!,

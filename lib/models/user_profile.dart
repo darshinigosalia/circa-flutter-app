@@ -1,7 +1,7 @@
 import 'tracking_track.dart';
 import 'cycle_mode.dart';
 
-class CycleProfile {
+class UserProfile {
   final TrackingTrack track;
   final DateTime? lastPeriod;
   final int cycleLengthInDays;
@@ -15,7 +15,7 @@ class CycleProfile {
   final bool trackMeds;
   final CycleMode? mode;
 
-  CycleProfile({
+  UserProfile({
     required this.track,
     this.lastPeriod,
     this.cycleLengthInDays = 28,
@@ -43,8 +43,8 @@ class CycleProfile {
     };
   }
 
-  factory CycleProfile.fromJson(Map<String, dynamic> json) {
-    return CycleProfile(
+  factory UserProfile.fromJson(Map<String, dynamic> json) {
+    return UserProfile(
       track: TrackingTrack.values.firstWhere(
         (e) => e.name == json['track'],
         orElse: () => TrackingTrack.periods,
@@ -69,7 +69,7 @@ class CycleProfile {
     return null;
   }
 
-  CycleProfile copyWith({
+  UserProfile copyWith({
     TrackingTrack? track,
     DateTime? lastPeriod,
     int? cycleLengthInDays,
@@ -81,7 +81,7 @@ class CycleProfile {
     bool? trackMeds,
     CycleMode? mode,
   }) {
-    return CycleProfile(
+    return UserProfile(
       track: track ?? this.track,
       lastPeriod: lastPeriod ?? this.lastPeriod,
       cycleLengthInDays: cycleLengthInDays ?? this.cycleLengthInDays,

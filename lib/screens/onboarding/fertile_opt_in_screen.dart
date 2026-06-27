@@ -3,7 +3,7 @@ import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
 import '../../services/storage_service.dart';
 import '../common/components.dart';
-import '../../models/cycle_profile.dart';
+import '../../models/user_profile.dart';
 import '../../utils/route_resolver.dart';
 
 class FertileOptInScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class FertileOptInScreen extends StatelessWidget {
 
   Future<void> _completeOnboarding(BuildContext context, OnboardingData finalData) async {
     if (finalData.lastPeriod != null && finalData.track != null && finalData.isFertile != null) {
-      final profile = CycleProfile(
+      final profile = UserProfile(
         track: finalData.track!,
         lastPeriod: finalData.lastPeriod!,
         isFertile: finalData.isFertile!,

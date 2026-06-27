@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
-import '../../models/cycle_profile.dart';
+import '../../models/user_profile.dart';
 import '../../models/tracking_track.dart';
 import '../../services/storage_service.dart';
 import '../../utils/route_resolver.dart';
@@ -20,7 +20,7 @@ class NpMedPromptScreen extends StatefulWidget {
 class _NpMedPromptScreenState extends State<NpMedPromptScreen> {
   Future<void> _finishAndNavigate(bool trackMeds, {Widget? nextScreen}) async {
     
-    final profile = CycleProfile(
+    final profile = UserProfile(
       track: widget.data.track ?? TrackingTrack.noperiods,
       isPregnant: widget.data.isPregnant ?? false,
       isFertile: widget.data.isFertile ?? false,

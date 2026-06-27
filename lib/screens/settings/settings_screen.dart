@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter_dynamic_icon/flutter_dynamic_icon.dart';
 import 'stealth_mode_screen.dart';
 import '../../theme/colors.dart';
-import '../../models/cycle_profile.dart';
+import '../../models/user_profile.dart';
 import '../../models/tracking_track.dart';
 import '../../models/cycle_mode.dart';
 import '../../services/storage_service.dart';
@@ -133,7 +133,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final profile = widget.storage.profile;
     if (profile == null) return;
     
-    final updated = CycleProfile(
+    final updated = UserProfile(
       track: profile.track,
       lastPeriod: profile.lastPeriod,
       cycleLengthInDays: profile.cycleLengthInDays,

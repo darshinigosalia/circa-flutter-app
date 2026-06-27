@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../common/components.dart';
 import '../../models/onboarding_data.dart';
-import '../../models/cycle_profile.dart';
+import '../../models/user_profile.dart';
 import '../../models/tracking_track.dart';
 import '../../services/storage_service.dart';
 import '../../utils/route_resolver.dart';
@@ -15,7 +15,7 @@ class ForgotPeriodScreen extends StatelessWidget {
   const ForgotPeriodScreen({super.key, required this.data});
 
   void _completeOnboarding(BuildContext context) async {
-    final profile = CycleProfile(
+    final profile = UserProfile(
       track: data.track ?? TrackingTrack.periods,
       isFertile: data.isFertile ?? false,
       isPregnant: data.isPregnant ?? false,
@@ -34,7 +34,7 @@ class ForgotPeriodScreen extends StatelessWidget {
   }
 
   void _trackSymptom(BuildContext context) async {
-    final profile = CycleProfile(
+    final profile = UserProfile(
       track: data.track ?? TrackingTrack.periods,
       isFertile: data.isFertile ?? false,
       isPregnant: data.isPregnant ?? false,

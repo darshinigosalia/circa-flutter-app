@@ -4,7 +4,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:circa_app/main.dart' as app;
 import 'package:circa_app/services/storage_service.dart';
 import 'package:circa_app/utils/app_clock.dart';
-import 'package:circa_app/models/cycle_profile.dart';
+import 'package:circa_app/models/user_profile.dart';
 import 'package:circa_app/models/tracking_track.dart';
 import 'package:circa_app/models/day_log.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -41,7 +41,7 @@ void main() {
     AppClock.setFixedTime(day1);
 
     // Use track: TrackingTrack.periods to match route_resolver.dart
-    await storageService.saveProfile(CycleProfile(
+    await storageService.saveProfile(UserProfile(
       track: TrackingTrack.periods,
       isFertile: true,
       lastPeriod: DateTime(2024, 5, 10),
@@ -67,7 +67,7 @@ void main() {
     await clearAndInitHive();
     final baseDay = DateTime(2024, 6, 1);
     AppClock.setFixedTime(baseDay);
-    await storageService.saveProfile(CycleProfile(
+    await storageService.saveProfile(UserProfile(
       track: TrackingTrack.periods,
       isFertile: true,
       lastPeriod: baseDay,
@@ -95,7 +95,7 @@ void main() {
     final lmp5 = DateTime(2024, 1, 1);
     // 60 days past LMP with a 28-day cycle → should show cycle day (60 % 28) + 1 = 5
     AppClock.setFixedTime(DateTime(2024, 3, 1));
-    await storageService.saveProfile(CycleProfile(
+    await storageService.saveProfile(UserProfile(
       track: TrackingTrack.periods,
       isFertile: true,
       lastPeriod: lmp5,
@@ -111,7 +111,7 @@ void main() {
     await clearAndInitHive();
     final lmp6 = DateTime(2024, 1, 1);
     AppClock.setFixedTime(lmp6.add(const Duration(days: 60)));
-    await storageService.saveProfile(CycleProfile(
+    await storageService.saveProfile(UserProfile(
       track: TrackingTrack.periods,
       isFertile: true,
       lastPeriod: lmp6,
@@ -127,7 +127,7 @@ void main() {
     await clearAndInitHive();
     final conceptionDate = DateTime(2024, 1, 1);
     AppClock.setFixedTime(conceptionDate);
-    await storageService.saveProfile(CycleProfile(
+    await storageService.saveProfile(UserProfile(
       track: TrackingTrack.noperiods,
       isFertile: false,
       isPregnant: true,
@@ -144,7 +144,7 @@ void main() {
     // Visual: future dates should appear faded (opacity 0.55)
     await clearAndInitHive();
     AppClock.setFixedTime(DateTime(2024, 6, 15));
-    await storageService.saveProfile(CycleProfile(
+    await storageService.saveProfile(UserProfile(
       track: TrackingTrack.periods,
       isFertile: true,
       lastPeriod: DateTime(2024, 6, 1),
@@ -160,7 +160,7 @@ void main() {
     await clearAndInitHive();
     final boundaryDate = DateTime(2024, 2, 27);
     AppClock.setFixedTime(boundaryDate);
-    await storageService.seedFromOnboarding(CycleProfile(
+    await storageService.seedFromOnboarding(UserProfile(
       track: TrackingTrack.periods,
       lastPeriod: boundaryDate,
       cycleLengthInDays: 28,

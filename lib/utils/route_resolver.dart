@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/cycle_profile.dart';
+import '../models/user_profile.dart';
 import '../models/tracking_track.dart';
 import '../screens/home/postpartum_home_screen.dart';
 import '../screens/home/recovery_home_screen.dart';
@@ -14,7 +14,7 @@ import '../services/storage_service.dart';
 
 import '../models/cycle_mode.dart';
 
-Widget resolveHome(CycleProfile? profile) {
+Widget resolveHome(UserProfile? profile) {
   if (profile == null) {
     return const IntroScreen();
   }
