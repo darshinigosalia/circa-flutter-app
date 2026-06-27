@@ -5,7 +5,6 @@ import '../../models/onboarding_data.dart';
 import '../common/components.dart';
 import 'fertile_opt_in_screen.dart';
 import '../track/forgot_period_screen.dart';
-import '../common/coming_soon_screen.dart';
 import 'package:circa_app/utils/app_clock.dart';
 
 class DateEntryScreen extends StatefulWidget {

@@ -7,7 +7,6 @@ import '../../services/storage_service.dart';
 import '../../utils/route_resolver.dart';
 import '../common/components.dart';
 import '../track/med_track_screen.dart';
-import '../charts/charts_screen.dart';
 
 class NpMedPromptScreen extends StatefulWidget {
   final OnboardingData data;

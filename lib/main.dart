@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'theme/colors.dart';
-import 'screens/onboarding/intro_screen.dart';
 import 'services/storage_service.dart';
 import 'utils/route_resolver.dart';
 

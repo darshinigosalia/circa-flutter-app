@@ -7,6 +7,7 @@ import 'stealth_mode_screen.dart';
 import '../../theme/colors.dart';
 import '../../models/cycle_profile.dart';
 import '../../models/tracking_track.dart';
+import '../../models/cycle_mode.dart';
 import '../../services/storage_service.dart';
 import '../../utils/route_resolver.dart';
 import '../common/components.dart';
@@ -107,7 +108,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _setPostpartum() async {
     final profile = widget.storage.profile;
     if (profile == null) return;
-    await widget.storage.saveProfile(profile.copyWith(mode: 'postpartum', isPregnant: false));
+    await widget.storage.saveProfile(profile.copyWith(mode: CycleMode.postpartum, isPregnant: false));
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => resolveHome(widget.storage.profile)),
@@ -119,7 +120,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _setRecovery() async {
     final profile = widget.storage.profile;
     if (profile == null) return;
-    await widget.storage.saveProfile(profile.copyWith(mode: 'recovery', isPregnant: false));
+    await widget.storage.saveProfile(profile.copyWith(mode: CycleMode.recovery, isPregnant: false));
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => resolveHome(widget.storage.profile)),
@@ -286,7 +287,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             
             Builder(
               builder: (context) {
-                final isPostpartumOrRecovery = profile?.mode == 'postpartum' || profile?.mode == 'recovery';
+                final isPostpartumOrRecovery = profile?.mode == CycleMode.postpartum || profile?.mode == CycleMode.recovery;
                 
                 if (isPostpartumOrRecovery) {
                   return Column(

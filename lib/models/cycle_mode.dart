@@ -1,0 +1,4 @@
+enum CycleMode {
+  postpartum,
+  recovery,
+}

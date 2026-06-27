@@ -1,4 +1,5 @@
 import 'tracking_track.dart';
+import 'cycle_mode.dart';
 
 class CycleProfile {
   final TrackingTrack track;
@@ -12,7 +13,7 @@ class CycleProfile {
   final Map<String, dynamic>? anchor;
   final List<String> symptomsToTrack;
   final bool trackMeds;
-  final String? mode;
+  final CycleMode? mode;
 
   CycleProfile({
     required this.track,
@@ -38,7 +39,7 @@ class CycleProfile {
       'anchor': anchor,
       'symptomsToTrack': symptomsToTrack,
       'trackMeds': trackMeds,
-      'mode': mode,
+      'mode': mode?.name,
     };
   }
 
@@ -56,8 +57,16 @@ class CycleProfile {
       anchor: json['anchor'] as Map<String, dynamic>?,
       symptomsToTrack: List<String>.from(json['symptomsToTrack'] ?? []),
       trackMeds: json['trackMeds'] ?? false,
-      mode: json['mode'],
+      mode: _parseMode(json['mode']),
     );
+  }
+
+  static CycleMode? _parseMode(String? val) {
+    if (val == null) return null;
+    for (final e in CycleMode.values) {
+      if (e.name == val) return e;
+    }
+    return null;
   }
 
   CycleProfile copyWith({
@@ -70,7 +79,7 @@ class CycleProfile {
     Map<String, dynamic>? anchor,
     List<String>? symptomsToTrack,
     bool? trackMeds,
-    String? mode,
+    CycleMode? mode,
   }) {
     return CycleProfile(
       track: track ?? this.track,

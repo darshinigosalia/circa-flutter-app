@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/cycle_profile.dart';
 import '../models/tracking_track.dart';
-import '../screens/common/coming_soon_screen.dart';
 import '../screens/home/postpartum_home_screen.dart';
 import '../screens/home/recovery_home_screen.dart';
 import '../screens/home/pregnancy_home_screen.dart';
@@ -13,16 +12,18 @@ import '../screens/onboarding/intro_screen.dart';
 import '../models/onboarding_data.dart';
 import '../services/storage_service.dart';
 
+import '../models/cycle_mode.dart';
+
 Widget resolveHome(CycleProfile? profile) {
   if (profile == null) {
     return const IntroScreen();
   }
 
-  if (profile.mode == 'postpartum') {
+  if (profile.mode == CycleMode.postpartum) {
     return PostpartumHomeScreen(storage: storageService);
   }
   
-  if (profile.mode == 'recovery') {
+  if (profile.mode == CycleMode.recovery) {
     return RecoveryHomeScreen(storage: storageService);
   }
 
