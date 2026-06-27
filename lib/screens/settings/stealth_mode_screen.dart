@@ -43,7 +43,7 @@ class _StealthModeScreenState extends State<StealthModeScreen> {
         } else {
           // If turning off, revert to default
           await FlutterDynamicIcon.setAlternateIconName(null);
-          // Keep the preference of which icon they had, but disable the mode
+          // Keep the preference of which icon they had, but disable the pregnancyOutcome
         }
       }
     } catch (e) {
@@ -121,7 +121,7 @@ class _StealthModeScreenState extends State<StealthModeScreen> {
           ),
           const SizedBox(height: 12),
           const Text(
-            "Your safety and privacy are paramount. Stealth mode allows you to disguise the app's icon on your device.",
+            "Your safety and privacy are paramount. Stealth pregnancyOutcome allows you to disguise the app's icon on your device.",
             style: TextStyle(fontSize: 16, color: CircaColors.ink, height: 1.5),
           ),
           const SizedBox(height: 32),

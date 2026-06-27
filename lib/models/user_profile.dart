@@ -1,5 +1,5 @@
 import 'tracking_track.dart';
-import 'cycle_mode.dart';
+import 'pregnancy_outcome.dart';
 
 class UserProfile {
   final TrackingTrack track;
@@ -13,7 +13,7 @@ class UserProfile {
   final Map<String, dynamic>? anchor;
   final List<String> symptomsToTrack;
   final bool trackMeds;
-  final CycleMode? mode;
+  final PregnancyOutcome? pregnancyOutcome;
 
   UserProfile({
     required this.track,
@@ -25,7 +25,7 @@ class UserProfile {
     this.anchor,
     this.symptomsToTrack = const [],
     this.trackMeds = false,
-    this.mode,
+    this.pregnancyOutcome,
   });
 
   Map<String, dynamic> toJson() {
@@ -39,7 +39,7 @@ class UserProfile {
       'anchor': anchor,
       'symptomsToTrack': symptomsToTrack,
       'trackMeds': trackMeds,
-      'mode': mode?.name,
+      'pregnancyOutcome': pregnancyOutcome?.name,
     };
   }
 
@@ -57,13 +57,13 @@ class UserProfile {
       anchor: json['anchor'] as Map<String, dynamic>?,
       symptomsToTrack: List<String>.from(json['symptomsToTrack'] ?? []),
       trackMeds: json['trackMeds'] ?? false,
-      mode: _parseMode(json['mode']),
+      pregnancyOutcome: _parsePregnancyOutcome(json['pregnancyOutcome']),
     );
   }
 
-  static CycleMode? _parseMode(String? val) {
+  static PregnancyOutcome? _parsePregnancyOutcome(String? val) {
     if (val == null) return null;
-    for (final e in CycleMode.values) {
+    for (final e in PregnancyOutcome.values) {
       if (e.name == val) return e;
     }
     return null;
@@ -79,7 +79,7 @@ class UserProfile {
     Map<String, dynamic>? anchor,
     List<String>? symptomsToTrack,
     bool? trackMeds,
-    CycleMode? mode,
+    PregnancyOutcome? pregnancyOutcome,
   }) {
     return UserProfile(
       track: track ?? this.track,
@@ -91,7 +91,7 @@ class UserProfile {
       anchor: anchor ?? this.anchor,
       symptomsToTrack: symptomsToTrack ?? this.symptomsToTrack,
       trackMeds: trackMeds ?? this.trackMeds,
-      mode: mode ?? this.mode,
+      pregnancyOutcome: pregnancyOutcome ?? this.pregnancyOutcome,
     );
   }
 }

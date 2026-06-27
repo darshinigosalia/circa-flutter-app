@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
 import '../../models/tracking_track.dart';
-import '../../models/cycle_mode.dart';
+import '../../models/pregnancy_outcome.dart';
 import '../../utils/route_resolver.dart';
 import '../../models/day_log.dart';
 import '../../services/storage_service.dart';
@@ -231,8 +231,8 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
     final profile = widget.storage.profile;
     final showPeriodButtons = profile != null &&
         (profile.track == TrackingTrack.periods ||
-         profile.mode == CycleMode.postpartum ||
-         profile.mode == CycleMode.recovery);
+         profile.pregnancyOutcome == PregnancyOutcome.postpartum ||
+         profile.pregnancyOutcome == PregnancyOutcome.recovery);
 
     return Scaffold(
       backgroundColor: CircaColors.bg,

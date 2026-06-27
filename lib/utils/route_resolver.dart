@@ -12,18 +12,18 @@ import '../screens/onboarding/intro_screen.dart';
 import '../models/onboarding_data.dart';
 import '../services/storage_service.dart';
 
-import '../models/cycle_mode.dart';
+import '../models/pregnancy_outcome.dart';
 
 Widget resolveHome(UserProfile? profile) {
   if (profile == null) {
     return const IntroScreen();
   }
 
-  if (profile.mode == CycleMode.postpartum) {
+  if (profile.pregnancyOutcome == PregnancyOutcome.postpartum) {
     return PostpartumHomeScreen(storage: storageService);
   }
   
-  if (profile.mode == CycleMode.recovery) {
+  if (profile.pregnancyOutcome == PregnancyOutcome.recovery) {
     return RecoveryHomeScreen(storage: storageService);
   }
 

@@ -1,4 +1,4 @@
-enum CycleMode {
+enum PregnancyOutcome {
   postpartum,
   recovery,
 }

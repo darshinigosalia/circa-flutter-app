@@ -1,13 +1,10 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_dynamic_icon/flutter_dynamic_icon.dart';
 import 'stealth_mode_screen.dart';
 import '../../theme/colors.dart';
 import '../../models/user_profile.dart';
-import '../../models/tracking_track.dart';
-import '../../models/cycle_mode.dart';
+import '../../models/pregnancy_outcome.dart';
 import '../../services/storage_service.dart';
 import '../../utils/route_resolver.dart';
 import '../common/components.dart';
@@ -108,7 +105,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _setPostpartum() async {
     final profile = widget.storage.profile;
     if (profile == null) return;
-    await widget.storage.saveProfile(profile.copyWith(mode: CycleMode.postpartum, isPregnant: false));
+    await widget.storage.saveProfile(profile.copyWith(pregnancyOutcome: PregnancyOutcome.postpartum, isPregnant: false));
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => resolveHome(widget.storage.profile)),
@@ -120,7 +117,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _setRecovery() async {
     final profile = widget.storage.profile;
     if (profile == null) return;
-    await widget.storage.saveProfile(profile.copyWith(mode: CycleMode.recovery, isPregnant: false));
+    await widget.storage.saveProfile(profile.copyWith(pregnancyOutcome: PregnancyOutcome.recovery, isPregnant: false));
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => resolveHome(widget.storage.profile)),
@@ -143,7 +140,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       anchor: profile.anchor,
       symptomsToTrack: profile.symptomsToTrack,
       trackMeds: profile.trackMeds,
-      mode: null,
+      pregnancyOutcome: null,
     );
     
     await widget.storage.saveProfile(updated);
@@ -287,7 +284,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             
             Builder(
               builder: (context) {
-                final isPostpartumOrRecovery = profile?.mode == CycleMode.postpartum || profile?.mode == CycleMode.recovery;
+                final isPostpartumOrRecovery = profile?.pregnancyOutcome == PregnancyOutcome.postpartum || profile?.pregnancyOutcome == PregnancyOutcome.recovery;
                 
                 if (isPostpartumOrRecovery) {
                   return Column(
@@ -317,7 +314,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         CircaChoiceCard(
                           icon: Icons.favorite_border,
                           title: "I'm no longer pregnant",
-                          subtitle: "We'll switch to a calm recovery mode, at your pace",
+                          subtitle: "We'll switch to a calm recovery pregnancyOutcome, at your pace",
                           onTap: _setRecovery,
                         ),
                       ],
@@ -441,7 +438,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const SizedBox(height: 16),
                 CircaButton(
-                  label: "Switch to pregnancy mode",
+                  label: "Switch to pregnancy pregnancyOutcome",
                   onPressed: _pregnantDate != null ? _switchToPregnancy : null,
                 ),
               ],
