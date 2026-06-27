@@ -1,8 +1,27 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 import 'components.dart';
 import 'track_fork_screen.dart';
 import '../models/onboarding_data.dart';
+
+class IntroSentence {
+  final String sentence;
+  final int gap; // milliseconds
+
+  const IntroSentence({
+    required this.sentence,
+    required this.gap,
+  });
+}
+
+class IntroPage {
+  final List<IntroSentence> sentences;
+
+  const IntroPage({
+    required this.sentences,
+  });
+}
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -12,160 +31,172 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin {
-  int _currentBeat = 0;
+  int _currentPage = 0;
   bool _animationCompleted = false;
+  Timer? _autoAdvanceTimer;
 
-  final List<List<String>> _beats = [
-    [
-      "Hi.",
-      "[gap]",
-      "We're really glad you're here.",
-    ],
-    [
-      "your hormones and your cycles",
-      "together tell one story",
-    ],
-    [
-      "When you notice how you feel,",
-      "you begin to understand your body's rhythm,",
-      "whether you bleed, or not.",
-    ],
-    [
-      "Circa is for anyone navigating periods, hormones, or cycles",
-      "[gap]",
-      "no matter how you identify.",
-    ],
-    [
-      "Private. First, and always.",
-      "[gap]",
-      "Stored safely on your own device.",
-      "No accounts, no ads, no data selling.",
-      "[gap]",
-      "And completely free.",
-    ],
-    [
-      "However your body moves through time,",
-      "[gap]",
-      "we'll follow along",
-      "[gap]",
-      "gently, and",
-      "always at your pace.",
-    ],
+  static const int _pageDelayMs = 1000;
+  static const int _sentenceAnimDurationMs = 600;
+
+  static const List<IntroPage> _pages = [
+    IntroPage(sentences: [
+      IntroSentence(sentence: "Hi.", gap: 500),
+      IntroSentence(sentence: "We're really glad you're here.", gap: 0),
+    ]),
+    IntroPage(sentences: [
+      IntroSentence(sentence: "your hormones and your cycles", gap: 500),
+      IntroSentence(sentence: "together tell one story", gap: 0),
+    ]),
+    IntroPage(sentences: [
+      IntroSentence(sentence: "When you notice how you feel,", gap: 500),
+      IntroSentence(sentence: "you begin to understand your body's rhythm,", gap: 500),
+      IntroSentence(sentence: "whether you bleed, or not.", gap: 0),
+    ]),
+    IntroPage(sentences: [
+      IntroSentence(sentence: "Circa is for anyone navigating periods, hormones, or cycles", gap: 500),
+      IntroSentence(sentence: "no matter how you identify.", gap: 0),
+    ]),
+    IntroPage(sentences: [
+      IntroSentence(sentence: "Private. First, and always.", gap: 500),
+      IntroSentence(sentence: "Stored safely on your own device.", gap: 500),
+      IntroSentence(sentence: "No accounts, no ads, no data selling.", gap: 500),
+      IntroSentence(sentence: "And completely free.", gap: 0),
+    ]),
+    IntroPage(sentences: [
+      IntroSentence(sentence: "However your body moves through time,", gap: 500),
+      IntroSentence(sentence: "we'll follow along", gap: 500),
+      IntroSentence(sentence: "gently, and", gap: 500),
+      IntroSentence(sentence: "always at your pace.", gap: 0),
+    ]),
   ];
 
   AnimationController? _controller;
   final List<Animation<double>> _opacities = [];
+  final List<Animation<Offset>> _slides = [];
 
   @override
   void initState() {
     super.initState();
-    _setupAnimationsForBeat();
+    _setupAnimationsForPage();
   }
 
-  void _setupAnimationsForBeat() {
+  void _setupAnimationsForPage() {
+    _autoAdvanceTimer?.cancel();
     if (mounted) {
-      // Clear previous animations
       _controller?.dispose();
     }
-    
-    final lines = _beats[_currentBeat];
-    
-    int totalMsForBeat = 0;
-    for (int i = 0; i < lines.length; i++) {
-      if (lines[i] == "[gap]") {
-        totalMsForBeat += 2500;
-      } else {
-        totalMsForBeat += 3500;
-      }
+
+    final page = _pages[_currentPage];
+    final sentences = page.sentences;
+    final int numSentences = sentences.length;
+
+    // Calculate start times for each sentence
+    final List<int> startTimes = List.filled(numSentences, 0);
+    for (int i = 1; i < numSentences; i++) {
+      startTimes[i] = startTimes[i - 1] + _sentenceAnimDurationMs + sentences[i - 1].gap;
     }
-    
-    final exactDurationMs = totalMsForBeat + 100; // a little padding
-    
+
+    final int totalDurationMs = startTimes.last + _sentenceAnimDurationMs;
+
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: exactDurationMs),
+      duration: Duration(milliseconds: totalDurationMs),
     );
 
     _opacities.clear();
+    _slides.clear();
 
-    int currentStartMs = 0;
-    
-    for (int i = 0; i < lines.length; i++) {
-      if (lines[i] == "[gap]") {
-        currentStartMs += 2500;
-      } else {
-        final startMs = currentStartMs;
-        final endMs = startMs + 650; // 650ms duration
-        
-        final curved = CurvedAnimation(
-          parent: _controller!,
-          curve: Interval(
-            startMs / exactDurationMs,
-            endMs / exactDurationMs,
-            curve: Curves.easeOutCubic,
-          ),
-        );
-        
-        _opacities.add(Tween<double>(begin: 0.0, end: 1.0).animate(curved));
-        
-        currentStartMs += 3500; // Slower stagger for next real line
-      }
+    for (int i = 0; i < numSentences; i++) {
+      final startMs = startTimes[i];
+      final endMs = startMs + _sentenceAnimDurationMs;
+
+      final startInterval = startMs / totalDurationMs;
+      final endInterval = endMs / totalDurationMs;
+
+      final curved = CurvedAnimation(
+        parent: _controller!,
+        curve: Interval(
+          startInterval.clamp(0.0, 1.0),
+          endInterval.clamp(0.0, 1.0),
+          curve: Curves.easeOutCubic,
+        ),
+      );
+
+      _opacities.add(Tween<double>(begin: 0.0, end: 1.0).animate(curved));
+      _slides.add(Tween<Offset>(
+        begin: const Offset(0, 24),
+        end: Offset.zero,
+      ).animate(curved));
     }
 
-    // Wait until build is complete so we can check MediaQuery for reduced motion
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final disableAnimations = MediaQuery.of(context).disableAnimations;
       if (disableAnimations) {
-        _controller!.value = 1.0; // Instantly complete
-        _onBeatAnimationComplete();
+        _controller!.value = 1.0;
+        _onPageAnimationComplete();
       } else {
         _animationCompleted = false;
-        _controller!.forward().then((_) {
-          if (mounted) _onBeatAnimationComplete();
+        final currentController = _controller!;
+        currentController.forward().then((_) {
+          if (mounted && _controller == currentController) {
+            _onPageAnimationComplete();
+          }
         });
       }
     });
   }
 
-  void _onBeatAnimationComplete() {
+  void _onPageAnimationComplete() {
     setState(() {
       _animationCompleted = true;
     });
-    
-    if (_currentBeat < _beats.length - 1) {
-      // Read pause then auto-advance
-      Future.delayed(const Duration(seconds: 3)).then((_) {
-        if (mounted && _animationCompleted && _currentBeat < _beats.length - 1) {
-          _advanceBeat();
+
+    if (_currentPage < _pages.length - 1) {
+      _autoAdvanceTimer = Timer(const Duration(milliseconds: _pageDelayMs), () {
+        if (mounted && _animationCompleted && _currentPage < _pages.length - 1) {
+          _goToPage(_currentPage + 1);
         }
       });
     }
   }
 
-  void _advanceBeat() {
-    if (_currentBeat < _beats.length - 1) {
-      setState(() {
-        _currentBeat++;
-        _animationCompleted = false;
-      });
-      _setupAnimationsForBeat();
-    }
+  void _goToPage(int pageIndex) {
+    if (pageIndex < 0 || pageIndex >= _pages.length) return;
+
+    _autoAdvanceTimer?.cancel();
+
+    setState(() {
+      _currentPage = pageIndex;
+      _animationCompleted = false;
+    });
+
+    _setupAnimationsForPage();
   }
 
-  void _handleTap() {
-    if (_currentBeat < _beats.length - 1) {
-      if (!_animationCompleted) {
-        // If still animating, jump to end of beat
-        _controller!.value = 1.0;
-        _onBeatAnimationComplete();
-      } else {
-        _advanceBeat();
+  void _handleTapUp(TapUpDetails details) {
+    final width = MediaQuery.of(context).size.width;
+    final x = details.globalPosition.dx;
+    if (x < width / 2) {
+      // Left side tap -> Previous page
+      if (_currentPage > 0) {
+        _goToPage(_currentPage - 1);
+      }
+    } else {
+      // Right side tap
+      if (_currentPage < _pages.length - 1) {
+        // Go to next page
+        _goToPage(_currentPage + 1);
+      } else if (_currentPage == _pages.length - 1 && !_animationCompleted) {
+        // On final page and not yet completed -> immediately complete animations and show button
+        _controller?.value = 1.0;
+        _onPageAnimationComplete();
       }
     }
   }
 
   void _skipIntro() {
+    _autoAdvanceTimer?.cancel();
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => const TrackForkScreen(data: OnboardingData())),
     );
@@ -173,6 +204,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
 
   @override
   void dispose() {
+    _autoAdvanceTimer?.cancel();
     _controller?.dispose();
     super.dispose();
   }
@@ -214,18 +246,18 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                   ],
                 ),
               ),
-              
+
               // Body
               Expanded(
                 child: GestureDetector(
-                  onTap: _handleTap,
+                  onTapUp: _handleTapUp,
                   behavior: HitTestBehavior.opaque,
                   child: Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 26),
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: _buildBeatContent(disableAnimations),
+                        child: _buildPageContent(disableAnimations),
                       ),
                     ),
                   ),
@@ -238,41 +270,41 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (_currentBeat == _beats.length - 1)
-                      AnimatedOpacity(
-                        key: const ValueKey('lets_begin_btn'),
-                        duration: const Duration(milliseconds: 400),
-                        opacity: disableAnimations || _animationCompleted ? 1.0 : 0.0,
-                        child: CircaButton(
-                          label: "Let's begin",
-                          onPressed: () {
-                            _skipIntro();
-                          },
-                        ),
-                      )
-                    else
-                      AnimatedOpacity(
-                        key: ValueKey('tap_to_continue_$_currentBeat'),
-                        duration: const Duration(milliseconds: 400),
-                        opacity: disableAnimations || _animationCompleted ? 1.0 : 0.0,
-                        child: Text(
-                          "tap to continue",
-                          style: CircaColors.helpText.copyWith(fontSize: 14),
+                    if (_currentPage == _pages.length - 1) ...[
+                      AnimatedSlide(
+                        offset: _animationCompleted ? Offset.zero : const Offset(0.0, 0.25),
+                        duration: const Duration(milliseconds: 600),
+                        curve: Curves.easeOutCubic,
+                        child: AnimatedOpacity(
+                          opacity: _animationCompleted ? 1.0 : 0.0,
+                          duration: const Duration(milliseconds: 600),
+                          curve: Curves.easeOutCubic,
+                          child: CircaButton(
+                            label: "Let's begin",
+                            onPressed: _skipIntro,
+                          ),
                         ),
                       ),
-                    const SizedBox(height: 24),
+                      const SizedBox(height: 24),
+                    ],
                     // Progress ticks
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(6, (index) {
-                        final isFilled = index <= _currentBeat;
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: 24,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: isFilled ? CircaColors.accent : CircaColors.line,
-                            borderRadius: BorderRadius.circular(2),
+                      children: List.generate(_pages.length, (index) {
+                        final isFilled = index <= _currentPage;
+                        return GestureDetector(
+                          onTap: () => _goToPage(index),
+                          behavior: HitTestBehavior.opaque,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+                            child: Container(
+                              width: 24,
+                              height: 4,
+                              decoration: BoxDecoration(
+                                color: isFilled ? CircaColors.accent : CircaColors.line,
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
                           ),
                         );
                       }),
@@ -287,40 +319,47 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
     );
   }
 
-  Widget _buildBeatContent(bool disableAnimations) {
-    final lines = _beats[_currentBeat];
-    List<Widget> widgets = [];
-    int realLineIndex = 0;
+  Widget _buildPageContent(bool disableAnimations) {
+    final page = _pages[_currentPage];
+    if (_controller == null || _opacities.length < page.sentences.length || _slides.length < page.sentences.length) {
+      return const SizedBox.shrink();
+    }
 
-    for (int i = 0; i < lines.length; i++) {
-      if (lines[i] == "[gap]") {
+    final List<Widget> widgets = [];
+
+    for (int i = 0; i < page.sentences.length; i++) {
+      if (i > 0) {
         widgets.add(const SizedBox(height: 16));
-      } else {
-        final animIndex = realLineIndex;
-        final opacity = _opacities[animIndex];
-        
-        widgets.add(
-          AnimatedBuilder(
-            animation: _controller!,
-            builder: (context, child) {
-              final valOpacity = disableAnimations ? 1.0 : opacity.value;
-              return Opacity(
-                opacity: valOpacity,
+      }
+
+      final sentence = page.sentences[i].sentence;
+      final opacity = _opacities[i];
+      final slide = _slides[i];
+
+      widgets.add(
+        AnimatedBuilder(
+          animation: _controller!,
+          builder: (context, child) {
+            final valOpacity = disableAnimations ? 1.0 : opacity.value;
+            final valOffset = disableAnimations ? Offset.zero : slide.value;
+            return Opacity(
+              opacity: valOpacity,
+              child: Transform.translate(
+                offset: valOffset,
                 child: child,
-              );
-            },
-            child: Text(
-              lines[i],
-              textAlign: TextAlign.left,
-              style: CircaColors.title.copyWith(
-                fontWeight: FontWeight.w500,
-                height: 1.5, // Increased line spacing
               ),
+            );
+          },
+          child: Text(
+            sentence,
+            textAlign: TextAlign.left,
+            style: CircaColors.title.copyWith(
+              fontWeight: FontWeight.w500,
+              height: 1.5, // Increased line spacing
             ),
           ),
-        );
-        realLineIndex++;
-      }
+        ),
+      );
     }
 
     return Column(
