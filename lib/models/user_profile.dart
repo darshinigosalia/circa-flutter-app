@@ -1,8 +1,8 @@
-import 'tracking_track.dart';
+import 'cycle_type.dart';
 import 'pregnancy_outcome.dart';
 
 class UserProfile {
-  final TrackingTrack track;
+  final CycleType cycleType;
   final DateTime? lastPeriod;
   final int cycleLengthInDays;
   final bool isFertile;
@@ -16,7 +16,7 @@ class UserProfile {
   final PregnancyOutcome? pregnancyOutcome;
 
   UserProfile({
-    required this.track,
+    required this.cycleType,
     this.lastPeriod,
     this.cycleLengthInDays = 28,
     required this.isFertile,
@@ -30,7 +30,7 @@ class UserProfile {
 
   Map<String, dynamic> toJson() {
     return {
-      'track': track.name,
+      'cycleType': cycleType.name,
       'lastPeriod': lastPeriod?.toIso8601String(),
       'cycleLengthInDays': cycleLengthInDays,
       'isFertile': isFertile,
@@ -45,9 +45,9 @@ class UserProfile {
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
-      track: TrackingTrack.values.firstWhere(
-        (e) => e.name == json['track'],
-        orElse: () => TrackingTrack.periods,
+      cycleType: CycleType.values.firstWhere(
+        (e) => e.name == json['cycleType'],
+        orElse: () => CycleType.periods,
       ),
       lastPeriod: json['lastPeriod'] != null ? DateTime.parse(json['lastPeriod']) : null,
       cycleLengthInDays: json['cycleLengthInDays'] ?? 28,
@@ -70,7 +70,7 @@ class UserProfile {
   }
 
   UserProfile copyWith({
-    TrackingTrack? track,
+    CycleType? cycleType,
     DateTime? lastPeriod,
     int? cycleLengthInDays,
     bool? isFertile,
@@ -82,7 +82,7 @@ class UserProfile {
     PregnancyOutcome? pregnancyOutcome,
   }) {
     return UserProfile(
-      track: track ?? this.track,
+      cycleType: cycleType ?? this.cycleType,
       lastPeriod: lastPeriod ?? this.lastPeriod,
       cycleLengthInDays: cycleLengthInDays ?? this.cycleLengthInDays,
       isFertile: isFertile ?? this.isFertile,

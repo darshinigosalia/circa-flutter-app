@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
-import '../../models/tracking_track.dart';
+import '../../models/cycle_type.dart';
 import '../../models/pregnancy_outcome.dart';
 import '../../utils/route_resolver.dart';
 import '../../models/day_log.dart';
@@ -230,7 +230,7 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
     // Show period buttons only for personas who bleed.
     final profile = widget.storage.profile;
     final showPeriodButtons = profile != null &&
-        (profile.track == TrackingTrack.periods ||
+        (profile.cycleType == CycleType.periods ||
          profile.pregnancyOutcome == PregnancyOutcome.postpartum ||
          profile.pregnancyOutcome == PregnancyOutcome.recovery);
 

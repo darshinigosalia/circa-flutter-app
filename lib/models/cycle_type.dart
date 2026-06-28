@@ -1,0 +1,4 @@
+enum CycleType {
+  periods,
+  noPeriods,
+}

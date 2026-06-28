@@ -3,7 +3,7 @@ import '../../theme/colors.dart';
 import '../common/components.dart';
 import '../../models/onboarding_data.dart';
 import '../../models/user_profile.dart';
-import '../../models/tracking_track.dart';
+import '../../models/cycle_type.dart';
 import '../../services/storage_service.dart';
 import '../../utils/route_resolver.dart';
 import 'track_hub_screen.dart';
@@ -16,7 +16,7 @@ class ForgotPeriodScreen extends StatelessWidget {
 
   void _completeOnboarding(BuildContext context) async {
     final profile = UserProfile(
-      track: data.track ?? TrackingTrack.periods,
+      cycleType: data.cycleType ?? CycleType.periods,
       isFertile: data.isFertile ?? false,
       isPregnant: data.isPregnant ?? false,
       lastPeriod: null, // intentionally null
@@ -35,7 +35,7 @@ class ForgotPeriodScreen extends StatelessWidget {
 
   void _trackSymptom(BuildContext context) async {
     final profile = UserProfile(
-      track: data.track ?? TrackingTrack.periods,
+      cycleType: data.cycleType ?? CycleType.periods,
       isFertile: data.isFertile ?? false,
       isPregnant: data.isPregnant ?? false,
       lastPeriod: null, // intentionally null

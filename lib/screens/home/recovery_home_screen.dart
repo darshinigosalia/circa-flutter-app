@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import '../../theme/colors.dart';
 import '../../services/storage_service.dart';
 import '../../models/onboarding_data.dart';
-import '../../models/tracking_track.dart';
+import '../../models/cycle_type.dart';
 import '../../models/day_log.dart';
 import '../common/components.dart';
 import '../track/track_hub_screen.dart';
@@ -76,7 +76,7 @@ class _RecoveryHomeScreenState extends State<RecoveryHomeScreen> {
                                     date: today,
                                     storage: widget.storage,
                                     data: OnboardingData(
-                                      track: profile.track,
+                                      cycleType: profile.cycleType,
                                       isPregnant: profile.isPregnant,
                                       lastPeriod: profile.lastPeriod,
                                       isFertile: profile.isFertile,
@@ -142,7 +142,7 @@ class _RecoveryHomeScreenState extends State<RecoveryHomeScreen> {
                                   date: AppClock.now(),
                                   storage: widget.storage,
                                   data: OnboardingData(
-                                    track: profile.track,
+                                    cycleType: profile.cycleType,
                                     isPregnant: profile.isPregnant,
                                     lastPeriod: profile.lastPeriod,
                                     isFertile: profile.isFertile,
@@ -219,7 +219,7 @@ class _RecoveryHomeScreenState extends State<RecoveryHomeScreen> {
     if (updatedDraft != null && mounted) {
       final profile = widget.storage.profile;
       final data = OnboardingData(
-        track: profile?.track,
+        cycleType: profile?.cycleType,
         isPregnant: profile?.isPregnant,
         lastPeriod: profile?.lastPeriod,
         isFertile: profile?.isFertile,

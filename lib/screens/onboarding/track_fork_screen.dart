@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
-import '../../models/tracking_track.dart';
+import '../../models/cycle_type.dart';
 import '../common/components.dart';
 import 'date_entry_screen.dart';
 import 'pregnancy_question_screen.dart';
@@ -28,7 +28,7 @@ class TrackForkScreen extends StatelessWidget {
               const SizedBox(height: 16),
               Text("GETTING STARTED", style: CircaColors.eyebrow),
               const SizedBox(height: 12),
-              Text("What would you like to track?", style: CircaColors.title),
+              Text("What would you like to cycleType?", style: CircaColors.title),
               const SizedBox(height: 12),
               Text(
                 "There's no wrong answer; you can always change this later.",
@@ -40,7 +40,7 @@ class TrackForkScreen extends StatelessWidget {
                 title: "I have a menstrual cycle",
                 subtitle: "I have a monthly bleed I'd like to follow (even if it is irregular)",
                 onTap: () {
-                  final newData = data.copyWith(track: TrackingTrack.periods, isPregnant: false);
+                  final newData = data.copyWith(cycleType: CycleType.periods, isPregnant: false);
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => DateEntryScreen(data: newData)),
                   );
@@ -52,7 +52,7 @@ class TrackForkScreen extends StatelessWidget {
                 title: "I don't currently have a period",
                 subtitle: "Pregnancy, hormones, menopause, or no bleed right now",
                 onTap: () {
-                  final newData = data.copyWith(track: TrackingTrack.noperiods);
+                  final newData = data.copyWith(cycleType: CycleType.noPeriods);
                   Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => PregnancyQuestionScreen(data: newData)),
                   );

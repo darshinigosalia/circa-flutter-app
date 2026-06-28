@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
 import '../../models/user_profile.dart';
-import '../../models/tracking_track.dart';
+import '../../models/cycle_type.dart';
 import '../../services/storage_service.dart';
 import '../../utils/route_resolver.dart';
 import '../common/components.dart';
@@ -21,7 +21,7 @@ class _NpMedPromptScreenState extends State<NpMedPromptScreen> {
   Future<void> _finishAndNavigate(bool trackMeds, {Widget? nextScreen}) async {
     
     final profile = UserProfile(
-      track: widget.data.track ?? TrackingTrack.noperiods,
+      cycleType: widget.data.cycleType ?? CycleType.noPeriods,
       isPregnant: widget.data.isPregnant ?? false,
       isFertile: widget.data.isFertile ?? false,
       hormones: widget.data.hormones ?? [],
@@ -59,7 +59,7 @@ class _NpMedPromptScreenState extends State<NpMedPromptScreen> {
               const SizedBox(height: 16),
               Text("CYCLE WITHOUT PERIODS", style: CircaColors.eyebrow),
               const SizedBox(height: 12),
-              Text("Would you like to track medications?", style: CircaColors.title),
+              Text("Would you like to cycleType medications?", style: CircaColors.title),
               const SizedBox(height: 12),
               Text(
                 "Set doses and get gentle reminders, or skip straight to your charts. Up to you.",
@@ -69,7 +69,7 @@ class _NpMedPromptScreenState extends State<NpMedPromptScreen> {
               
               CircaChoiceCard(
                 icon: Icons.medication_outlined,
-                title: "Yes, track medications",
+                title: "Yes, cycleType medications",
                 subtitle: "Add meds, appointments and reminders",
                 onTap: () {
                   _finishAndNavigate(

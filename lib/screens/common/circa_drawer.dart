@@ -9,7 +9,7 @@ import '../track/track_hub_screen.dart';
 import '../settings/settings_screen.dart';
 import '../onboarding/intro_screen.dart';
 import '../../models/onboarding_data.dart';
-import '../../models/tracking_track.dart';
+import '../../models/cycle_type.dart';
 import 'package:circa_app/utils/app_clock.dart';
 
 class CircaDrawer extends StatelessWidget {
@@ -80,7 +80,7 @@ class CircaDrawer extends StatelessWidget {
                               date: AppClock.now(),
                               storage: storage,
                               data: OnboardingData(
-                                track: profile.track,
+                                cycleType: profile.cycleType,
                                 isPregnant: profile.isPregnant,
                                 lastPeriod: profile.lastPeriod,
                                 isFertile: profile.isFertile,

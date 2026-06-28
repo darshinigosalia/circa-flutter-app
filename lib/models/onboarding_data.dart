@@ -1,7 +1,7 @@
-import 'tracking_track.dart';
+import 'cycle_type.dart';
 
 class OnboardingData {
-  final TrackingTrack? track;
+  final CycleType? cycleType;
   final bool? isPregnant;
   final DateTime? lastPeriod;
   final bool? isFertile;
@@ -11,7 +11,7 @@ class OnboardingData {
   final bool? trackMeds;
 
   const OnboardingData({
-    this.track,
+    this.cycleType,
     this.isPregnant,
     this.lastPeriod,
     this.isFertile,
@@ -22,7 +22,7 @@ class OnboardingData {
   });
 
   OnboardingData copyWith({
-    TrackingTrack? track,
+    CycleType? cycleType,
     bool? isPregnant,
     DateTime? lastPeriod,
     bool? isFertile,
@@ -32,7 +32,7 @@ class OnboardingData {
     bool? trackMeds,
   }) {
     return OnboardingData(
-      track: track ?? this.track,
+      cycleType: cycleType ?? this.cycleType,
       isPregnant: isPregnant ?? this.isPregnant,
       lastPeriod: lastPeriod ?? this.lastPeriod,
       isFertile: isFertile ?? this.isFertile,

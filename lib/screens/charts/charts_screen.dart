@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../../services/storage_service.dart';
-import '../../models/tracking_track.dart';
+import '../../models/cycle_type.dart';
 import '../../models/pregnancy_outcome.dart';
 import '../common/components.dart';
 import 'charts_symptoms_tab.dart';
@@ -23,7 +23,7 @@ class _ChartsScreenState extends State<ChartsScreen> {
     final profile = widget.storage.profile;
     final isPregnant = profile?.isPregnant == true;
     final isPostpartumOrRecovery = profile?.pregnancyOutcome == PregnancyOutcome.postpartum || profile?.pregnancyOutcome == PregnancyOutcome.recovery;
-    final isNoPeriods = profile?.track == TrackingTrack.noperiods && !isPregnant && !isPostpartumOrRecovery;
+    final isNoPeriods = profile?.cycleType == CycleType.noPeriods && !isPregnant && !isPostpartumOrRecovery;
     final hasMeds = widget.storage.getAllMedications().isNotEmpty;
 
     List<Tab> tabs = [];

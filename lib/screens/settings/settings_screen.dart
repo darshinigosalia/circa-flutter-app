@@ -131,7 +131,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (profile == null) return;
     
     final updated = UserProfile(
-      track: profile.track,
+      cycleType: profile.cycleType,
       lastPeriod: profile.lastPeriod,
       cycleLengthInDays: profile.cycleLengthInDays,
       isFertile: profile.isFertile,

@@ -4,7 +4,7 @@ import '../../theme/colors.dart';
 import '../../services/storage_service.dart';
 import '../../utils/pregnancy_math.dart';
 import '../../models/onboarding_data.dart';
-import '../../models/tracking_track.dart';
+import '../../models/cycle_type.dart';
 import '../common/components.dart';
 import '../track/track_hub_screen.dart';
 import '../common/coming_soon_screen.dart';
@@ -41,7 +41,7 @@ class _PregnancyHomeScreenState extends State<PregnancyHomeScreen> {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (_) => GestationDateScreen(
-                  data: OnboardingData(track: profile.track, isPregnant: profile.isPregnant),
+                  data: OnboardingData(cycleType: profile.cycleType, isPregnant: profile.isPregnant),
                 ),
               ),
             );
@@ -199,7 +199,7 @@ class _PregnancyHomeScreenState extends State<PregnancyHomeScreen> {
                                   date: AppClock.now(),
                                   storage: widget.storage,
                                   data: OnboardingData(
-                                    track: profile.track,
+                                    cycleType: profile.cycleType,
                                     isPregnant: profile.isPregnant,
                                     lastPeriod: profile.lastPeriod,
                                     isFertile: profile.isFertile,

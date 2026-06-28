@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/user_profile.dart';
-import '../models/tracking_track.dart';
+import '../models/cycle_type.dart';
 import '../screens/home/postpartum_home_screen.dart';
 import '../screens/home/recovery_home_screen.dart';
 import '../screens/home/pregnancy_home_screen.dart';
@@ -32,32 +32,32 @@ Widget resolveHome(UserProfile? profile) {
       return PregnancyHomeScreen(storage: storageService);
     } else {
       return GestationDateScreen(data: OnboardingData(
-        track: profile.track,
+        cycleType: profile.cycleType,
         isPregnant: profile.isPregnant,
         isFertile: profile.isFertile,
       ));
     }
   }
 
-  if (profile.track == TrackingTrack.periods) {
+  if (profile.cycleType == CycleType.periods) {
     if (profile.lastPeriod != null) {
       return CycleHomeScreen(
         storage: storageService,
         data: OnboardingData(
-          track: profile.track,
+          cycleType: profile.cycleType,
           lastPeriod: profile.lastPeriod,
           isFertile: profile.isFertile,
         ),
       );
     } else {
       return DateEntryScreen(data: OnboardingData(
-        track: profile.track,
+        cycleType: profile.cycleType,
         isFertile: profile.isFertile,
       ));
     }
   }
 
-  if (profile.track == TrackingTrack.noperiods) {
+  if (profile.cycleType == CycleType.noPeriods) {
     return HomeTrackingScreen(storage: storageService);
   }
 

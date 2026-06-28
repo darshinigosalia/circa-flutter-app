@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
 import '../../models/user_profile.dart';
-import '../../models/tracking_track.dart';
+import '../../models/cycle_type.dart';
 import '../../services/storage_service.dart';
 import '../common/components.dart';
 import '../track/forgot_period_screen.dart';
@@ -118,7 +118,7 @@ class _GestationDateScreenState extends State<GestationDateScreen> {
                   final storage = storageService;
                   // Await saving to hive
                   final profile = UserProfile(
-                    track: widget.data.track ?? TrackingTrack.noperiods,
+                    cycleType: widget.data.cycleType ?? CycleType.noPeriods,
                     isPregnant: widget.data.isPregnant ?? true,
                     lastPeriod: _selectedDate!,
                     isFertile: widget.data.isFertile ?? false,

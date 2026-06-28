@@ -12,9 +12,9 @@ class FertileOptInScreen extends StatelessWidget {
   const FertileOptInScreen({super.key, required this.data});
 
   Future<void> _completeOnboarding(BuildContext context, OnboardingData finalData) async {
-    if (finalData.lastPeriod != null && finalData.track != null && finalData.isFertile != null) {
+    if (finalData.lastPeriod != null && finalData.cycleType != null && finalData.isFertile != null) {
       final profile = UserProfile(
-        track: finalData.track!,
+        cycleType: finalData.cycleType!,
         lastPeriod: finalData.lastPeriod!,
         isFertile: finalData.isFertile!,
       );
@@ -62,7 +62,7 @@ class FertileOptInScreen extends StatelessWidget {
               CircaChoiceCard(
                 icon: Icons.grass_outlined, // Botanical placeholder
                 title: "No, keep it simple",
-                subtitle: "Just track my period and symptoms",
+                subtitle: "Just cycleType my period and symptoms",
                 onTap: () => _completeOnboarding(context, data.copyWith(isFertile: false)),
               ),
             ],

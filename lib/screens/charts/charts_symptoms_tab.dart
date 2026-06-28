@@ -3,7 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import '../../theme/colors.dart';
 import '../../services/storage_service.dart';
 import '../../models/day_log.dart';
-import '../../models/tracking_track.dart';
+import '../../models/cycle_type.dart';
 import '../../utils/cycle_extractor.dart';
 import 'package:circa_app/utils/app_clock.dart';
 
@@ -33,7 +33,7 @@ class _ChartsSymptomsTabState extends State<ChartsSymptomsTab> {
   void _initToggles() {
     final profile = widget.storage.profile;
     final allLogs = widget.storage.getAllLogs();
-    final isNoPeriods = profile?.track == TrackingTrack.noperiods && profile?.isPregnant != true;
+    final isNoPeriods = profile?.cycleType == CycleType.noPeriods && profile?.isPregnant != true;
     
     // Base toggles
     _toggles = {
