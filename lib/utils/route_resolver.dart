@@ -14,35 +14,40 @@ import '../services/storage_service.dart';
 
 import '../models/pregnancy_outcome.dart';
 
-Widget resolveHome(UserProfile? profile) {
+Widget resolveHome(UserProfile? profile, [StorageService? storage]) {
+  final activeStorage = storage ?? storageService;
+
   if (profile == null) {
-    return const IntroScreen();
+    return IntroScreen(storage: activeStorage);
   }
 
   if (profile.pregnancyOutcome == PregnancyOutcome.postpartum) {
-    return PostpartumHomeScreen(storage: storageService);
+    return PostpartumHomeScreen(storage: activeStorage);
   }
   
   if (profile.pregnancyOutcome == PregnancyOutcome.recovery) {
-    return RecoveryHomeScreen(storage: storageService);
+    return RecoveryHomeScreen(storage: activeStorage);
   }
 
   if (profile.isPregnant) {
     if (profile.lastPeriod != null) {
-      return PregnancyHomeScreen(storage: storageService);
+      return PregnancyHomeScreen(storage: activeStorage);
     } else {
-      return GestationDateScreen(data: OnboardingData(
-        cycleType: profile.cycleType,
-        isPregnant: profile.isPregnant,
-        isFertile: profile.isFertile,
-      ));
+      return GestationDateScreen(
+        data: OnboardingData(
+          cycleType: profile.cycleType,
+          isPregnant: profile.isPregnant,
+          isFertile: profile.isFertile,
+        ),
+        storage: activeStorage,
+      );
     }
   }
 
   if (profile.cycleType == CycleType.periods) {
     if (profile.lastPeriod != null) {
       return CycleHomeScreen(
-        storage: storageService,
+        storage: activeStorage,
         data: OnboardingData(
           cycleType: profile.cycleType,
           lastPeriod: profile.lastPeriod,
@@ -50,16 +55,19 @@ Widget resolveHome(UserProfile? profile) {
         ),
       );
     } else {
-      return DateEntryScreen(data: OnboardingData(
-        cycleType: profile.cycleType,
-        isFertile: profile.isFertile,
-      ));
+      return DateEntryScreen(
+        data: OnboardingData(
+          cycleType: profile.cycleType,
+          isFertile: profile.isFertile,
+        ),
+        storage: activeStorage,
+      );
     }
   }
 
   if (profile.cycleType == CycleType.noPeriods) {
-    return HomeTrackingScreen(storage: storageService);
+    return HomeTrackingScreen(storage: activeStorage);
   }
 
-  return const IntroScreen();
+  return IntroScreen(storage: activeStorage);
 }

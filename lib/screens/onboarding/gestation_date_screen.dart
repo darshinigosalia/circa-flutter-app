@@ -12,8 +12,9 @@ import 'package:circa_app/utils/app_clock.dart';
 
 class GestationDateScreen extends StatefulWidget {
   final OnboardingData data;
+  final StorageService? storage;
 
-  const GestationDateScreen({super.key, required this.data});
+  const GestationDateScreen({super.key, required this.data, this.storage});
 
   @override
   State<GestationDateScreen> createState() => _GestationDateScreenState();
@@ -115,7 +116,7 @@ class _GestationDateScreenState extends State<GestationDateScreen> {
               CircaButton(
                 label: "Continue",
                 onPressed: _selectedDate == null ? null : () async {
-                  final storage = storageService;
+                  final activeStorage = widget.storage ?? storageService;
                   // Await saving to hive
                   final profile = UserProfile(
                     cycleType: widget.data.cycleType ?? CycleType.noPeriods,
@@ -124,11 +125,11 @@ class _GestationDateScreenState extends State<GestationDateScreen> {
                     isFertile: widget.data.isFertile ?? false,
                     cycleLengthInDays: 28,
                   );
-                  await storage.saveProfile(profile);
+                  await activeStorage.saveProfile(profile);
                   
                   if (!context.mounted) return;
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (_) => resolveHome(storageService.profile)),
+                    MaterialPageRoute(builder: (_) => resolveHome(activeStorage.profile, activeStorage)),
                     (route) => false,
                   );
                 },
@@ -138,7 +139,12 @@ class _GestationDateScreenState extends State<GestationDateScreen> {
                 child: TextButton(
                   onPressed: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => ForgotPeriodScreen(data: widget.data)),
+                      MaterialPageRoute(
+                        builder: (_) => ForgotPeriodScreen(
+                          data: widget.data,
+                          storage: widget.storage,
+                        ),
+                      ),
                     );
                   },
                   child: const Text(

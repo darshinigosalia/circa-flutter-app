@@ -8,21 +8,23 @@ import '../../utils/route_resolver.dart';
 
 class FertileOptInScreen extends StatelessWidget {
   final OnboardingData data;
+  final StorageService? storage;
 
-  const FertileOptInScreen({super.key, required this.data});
+  const FertileOptInScreen({super.key, required this.data, this.storage});
 
   Future<void> _completeOnboarding(BuildContext context, OnboardingData finalData) async {
+    final activeStorage = storage ?? storageService;
     if (finalData.lastPeriod != null && finalData.cycleType != null && finalData.isFertile != null) {
       final profile = UserProfile(
         cycleType: finalData.cycleType!,
         lastPeriod: finalData.lastPeriod!,
         isFertile: finalData.isFertile!,
       );
-      await storageService.seedFromOnboarding(profile);
+      await activeStorage.seedFromOnboarding(profile);
     }
     if (context.mounted) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => resolveHome(storageService.profile)),
+        MaterialPageRoute(builder: (_) => resolveHome(activeStorage.profile, activeStorage)),
         (route) => false,
       );
     }
@@ -62,7 +64,7 @@ class FertileOptInScreen extends StatelessWidget {
               CircaChoiceCard(
                 icon: Icons.grass_outlined, // Botanical placeholder
                 title: "No, keep it simple",
-                subtitle: "Just cycleType my period and symptoms",
+                subtitle: "Just track my period and symptoms",
                 onTap: () => _completeOnboarding(context, data.copyWith(isFertile: false)),
               ),
             ],

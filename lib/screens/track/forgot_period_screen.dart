@@ -11,10 +11,12 @@ import 'package:circa_app/utils/app_clock.dart';
 
 class ForgotPeriodScreen extends StatelessWidget {
   final OnboardingData data;
+  final StorageService? storage;
 
-  const ForgotPeriodScreen({super.key, required this.data});
+  const ForgotPeriodScreen({super.key, required this.data, this.storage});
 
   void _completeOnboarding(BuildContext context) async {
+    final activeStorage = storage ?? storageService;
     final profile = UserProfile(
       cycleType: data.cycleType ?? CycleType.periods,
       isFertile: data.isFertile ?? false,
@@ -24,16 +26,17 @@ class ForgotPeriodScreen extends StatelessWidget {
     );
 
     // Save and resolve home
-    await storageService.seedFromOnboarding(profile);
+    await activeStorage.seedFromOnboarding(profile);
     if (!context.mounted) return;
     
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => resolveHome(profile)),
+      MaterialPageRoute(builder: (_) => resolveHome(profile, activeStorage)),
       (route) => false,
     );
   }
 
   void _trackSymptom(BuildContext context) async {
+    final activeStorage = storage ?? storageService;
     final profile = UserProfile(
       cycleType: data.cycleType ?? CycleType.periods,
       isFertile: data.isFertile ?? false,
@@ -43,12 +46,12 @@ class ForgotPeriodScreen extends StatelessWidget {
     );
 
     // Save and resolve home
-    await storageService.seedFromOnboarding(profile);
+    await activeStorage.seedFromOnboarding(profile);
     if (!context.mounted) return;
     
     // Clear stack, go to home, then push TrackHubScreen
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => resolveHome(profile)),
+      MaterialPageRoute(builder: (_) => resolveHome(profile, activeStorage)),
       (route) => false,
     );
     // Home routing will handle setting up the home screen, wait a tiny bit to push the next screen
@@ -59,7 +62,7 @@ class ForgotPeriodScreen extends StatelessWidget {
           builder: (_) => TrackHubScreen(
             date: AppClock.now(),
             data: data,
-            storage: storageService,
+            storage: activeStorage,
           ),
         ),
       );

@@ -10,8 +10,9 @@ import '../track/med_track_screen.dart';
 
 class NpMedPromptScreen extends StatefulWidget {
   final OnboardingData data;
+  final StorageService? storage;
 
-  const NpMedPromptScreen({super.key, required this.data});
+  const NpMedPromptScreen({super.key, required this.data, this.storage});
 
   @override
   State<NpMedPromptScreen> createState() => _NpMedPromptScreenState();
@@ -19,7 +20,7 @@ class NpMedPromptScreen extends StatefulWidget {
 
 class _NpMedPromptScreenState extends State<NpMedPromptScreen> {
   Future<void> _finishAndNavigate(bool trackMeds, {Widget? nextScreen}) async {
-    
+    final activeStorage = widget.storage ?? storageService;
     final profile = UserProfile(
       cycleType: widget.data.cycleType ?? CycleType.noPeriods,
       isPregnant: widget.data.isPregnant ?? false,
@@ -30,11 +31,13 @@ class _NpMedPromptScreenState extends State<NpMedPromptScreen> {
       trackMeds: trackMeds,
     );
 
-    await storageService.saveProfile(profile);
+    await activeStorage.saveProfile(profile);
 
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => nextScreen ?? resolveHome(profile)),
+      MaterialPageRoute(
+        builder: (_) => nextScreen ?? resolveHome(profile, activeStorage),
+      ),
       (route) => false,
     );
   }
@@ -59,7 +62,7 @@ class _NpMedPromptScreenState extends State<NpMedPromptScreen> {
               const SizedBox(height: 16),
               Text("CYCLE WITHOUT PERIODS", style: CircaColors.eyebrow),
               const SizedBox(height: 12),
-              Text("Would you like to cycleType medications?", style: CircaColors.title),
+              Text("Would you like to track medications?", style: CircaColors.title),
               const SizedBox(height: 12),
               Text(
                 "Set doses and get gentle reminders, or skip straight to your charts. Up to you.",
@@ -69,12 +72,12 @@ class _NpMedPromptScreenState extends State<NpMedPromptScreen> {
               
               CircaChoiceCard(
                 icon: Icons.medication_outlined,
-                title: "Yes, cycleType medications",
+                title: "Yes, track medications",
                 subtitle: "Add meds, appointments and reminders",
                 onTap: () {
                   _finishAndNavigate(
                     true, 
-                    nextScreen: MedTrackScreen(storage: storageService),
+                    nextScreen: MedTrackScreen(storage: widget.storage ?? storageService),
                   );
                 },
               ),

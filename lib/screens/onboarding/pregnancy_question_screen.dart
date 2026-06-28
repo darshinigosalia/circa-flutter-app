@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
+import '../../services/storage_service.dart';
 import '../common/components.dart';
 import 'gestation_date_screen.dart';
 import 'np_hormones_screen.dart';
 
 class PregnancyQuestionScreen extends StatelessWidget {
   final OnboardingData data;
+  final StorageService? storage;
 
-  const PregnancyQuestionScreen({super.key, required this.data});
+  const PregnancyQuestionScreen({super.key, required this.data, this.storage});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class PregnancyQuestionScreen extends StatelessWidget {
                 onTap: () {
                   final newData = data.copyWith(isPregnant: true);
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => GestationDateScreen(data: newData)),
+                    MaterialPageRoute(builder: (_) => GestationDateScreen(data: newData, storage: storage)),
                   );
                 },
               ),
@@ -51,7 +53,7 @@ class PregnancyQuestionScreen extends StatelessWidget {
                 onTap: () {
                   final newData = data.copyWith(isPregnant: false);
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => NpHormonesScreen(data: newData)),
+                    MaterialPageRoute(builder: (_) => NpHormonesScreen(data: newData, storage: storage)),
                   );
                 },
               ),

@@ -3,11 +3,13 @@ import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
 import '../common/components.dart';
 import 'np_anchor_screen.dart';
+import '../../services/storage_service.dart';
 
 class NpHormonesScreen extends StatefulWidget {
   final OnboardingData data;
+  final StorageService? storage;
 
-  const NpHormonesScreen({super.key, required this.data});
+  const NpHormonesScreen({super.key, required this.data, this.storage});
 
   @override
   State<NpHormonesScreen> createState() => _NpHormonesScreenState();
@@ -38,7 +40,7 @@ class _NpHormonesScreenState extends State<NpHormonesScreen> {
 
     final newData = widget.data.copyWith(hormones: hormones);
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => NpAnchorScreen(data: newData)),
+      MaterialPageRoute(builder: (_) => NpAnchorScreen(data: newData, storage: widget.storage)),
     );
   }
 

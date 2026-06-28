@@ -4,12 +4,14 @@ import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
 import '../common/components.dart';
 import 'np_symptoms_screen.dart';
+import '../../services/storage_service.dart';
 import 'package:circa_app/utils/app_clock.dart';
 
 class NpAnchorScreen extends StatefulWidget {
   final OnboardingData data;
+  final StorageService? storage;
 
-  const NpAnchorScreen({super.key, required this.data});
+  const NpAnchorScreen({super.key, required this.data, this.storage});
 
   @override
   State<NpAnchorScreen> createState() => _NpAnchorScreenState();
@@ -91,7 +93,7 @@ class _NpAnchorScreenState extends State<NpAnchorScreen> {
 
     final newData = widget.data.copyWith(anchor: anchorData);
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => NpSymptomsScreen(data: newData)),
+      MaterialPageRoute(builder: (_) => NpSymptomsScreen(data: newData, storage: widget.storage)),
     );
   }
 

@@ -4,6 +4,7 @@ import '../../theme/colors.dart';
 import '../common/components.dart';
 import 'track_fork_screen.dart';
 import '../../models/onboarding_data.dart';
+import '../../services/storage_service.dart';
 
 class IntroSentence {
   final String sentence;
@@ -24,7 +25,9 @@ class IntroPage {
 }
 
 class IntroScreen extends StatefulWidget {
-  const IntroScreen({super.key});
+  final StorageService? storage;
+
+  const IntroScreen({super.key, this.storage});
 
   @override
   State<IntroScreen> createState() => _IntroScreenState();
@@ -198,7 +201,7 @@ class _IntroScreenState extends State<IntroScreen> with TickerProviderStateMixin
   void _skipIntro() {
     _autoAdvanceTimer?.cancel();
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => const TrackForkScreen(data: OnboardingData())),
+      MaterialPageRoute(builder: (_) => TrackForkScreen(data: OnboardingData(), storage: widget.storage)),
     );
   }
 

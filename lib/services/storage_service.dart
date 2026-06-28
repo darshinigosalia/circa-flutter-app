@@ -11,20 +11,22 @@ import 'package:circa_app/utils/app_clock.dart';
 final storageService = StorageService();
 
 class StorageService extends ChangeNotifier {
-  static const String _boxLogs = 'logs';
-  static const String _boxProfile = 'profile';
+  final String boxSuffix;
+
+  StorageService({this.boxSuffix = ''});
+
+  String get _boxLogs => 'logs$boxSuffix';
+  String get _boxProfile => 'profile$boxSuffix';
+  String get _boxMedications => 'medications$boxSuffix';
+  String get _boxAppointments => 'appointments$boxSuffix';
+  String get _boxSettings => 'settings$boxSuffix';
   static const String _profileKey = 'cycle_profile';
-  static const String _boxMedications = 'medications';
-  static const String _boxAppointments = 'appointments';
-  static const String _boxSettings = 'settings';
   
   final Map<String, DayLog> _logs = {}; // Keyed by YYYY-MM-DD
   UserProfile? _profile;
   
   bool _initialized = false;
   bool get isInitialized => _initialized;
-
-  StorageService();
 
   Future<void> init() async {
     final logsBox = Hive.box<String>(_boxLogs);

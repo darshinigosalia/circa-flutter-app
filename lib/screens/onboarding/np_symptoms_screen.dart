@@ -3,11 +3,13 @@ import '../../theme/colors.dart';
 import '../../models/onboarding_data.dart';
 import '../common/components.dart';
 import 'np_med_prompt_screen.dart';
+import '../../services/storage_service.dart';
 
 class NpSymptomsScreen extends StatefulWidget {
   final OnboardingData data;
+  final StorageService? storage;
 
-  const NpSymptomsScreen({super.key, required this.data});
+  const NpSymptomsScreen({super.key, required this.data, this.storage});
 
   @override
   State<NpSymptomsScreen> createState() => _NpSymptomsScreenState();
@@ -35,7 +37,7 @@ class _NpSymptomsScreenState extends State<NpSymptomsScreen> {
   void _onContinue() {
     final newData = widget.data.copyWith(symptomsToTrack: _selected.toList());
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => NpMedPromptScreen(data: newData)),
+      MaterialPageRoute(builder: (_) => NpMedPromptScreen(data: newData, storage: widget.storage)),
     );
   }
 

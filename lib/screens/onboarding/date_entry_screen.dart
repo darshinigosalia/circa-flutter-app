@@ -5,12 +5,14 @@ import '../../models/onboarding_data.dart';
 import '../common/components.dart';
 import 'fertile_opt_in_screen.dart';
 import '../track/forgot_period_screen.dart';
+import '../../services/storage_service.dart';
 import 'package:circa_app/utils/app_clock.dart';
 
 class DateEntryScreen extends StatefulWidget {
   final OnboardingData data;
+  final StorageService? storage;
 
-  const DateEntryScreen({super.key, required this.data});
+  const DateEntryScreen({super.key, required this.data, this.storage});
 
   @override
   State<DateEntryScreen> createState() => _DateEntryScreenState();
@@ -122,7 +124,7 @@ class _DateEntryScreenState extends State<DateEntryScreen> {
                 onPressed: _selectedDate == null ? null : () {
                   final newData = widget.data.copyWith(lastPeriod: _selectedDate);
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => FertileOptInScreen(data: newData)),
+                    MaterialPageRoute(builder: (_) => FertileOptInScreen(data: newData, storage: widget.storage)),
                   );
                 },
               ),
@@ -131,7 +133,7 @@ class _DateEntryScreenState extends State<DateEntryScreen> {
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => ForgotPeriodScreen(data: widget.data)),
+                      MaterialPageRoute(builder: (_) => ForgotPeriodScreen(data: widget.data, storage: widget.storage)),
                     );
                   },
                   child: Text(
