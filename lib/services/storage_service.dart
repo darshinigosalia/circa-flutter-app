@@ -75,7 +75,7 @@ class StorageService extends ChangeNotifier {
       final logsBox = Hive.box<String>(_boxLogs);
       final now = AppClock.now();
 
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < profile.periodLengthInDays; i++) {
         final d = profile.lastPeriod!.add(Duration(days: i));
         final normalizedDate = DateTime(d.year, d.month, d.day);
         final key = dateKey(normalizedDate);

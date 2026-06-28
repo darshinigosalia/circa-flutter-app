@@ -9,7 +9,6 @@ class PhaseInfo {
 }
 
 class CycleMath {
-  static const int defaultPeriodLength = 5;
 
   static int daysBetween(DateTime a, DateTime b) {
     final aNormalized = DateTime(a.year, a.month, a.day);
@@ -32,10 +31,10 @@ class CycleMath {
     return cycleLengthInDays - 14;
   }
 
-  static PhaseInfo getPhase(int dayInCycle, int cycleLengthInDays) {
+  static PhaseInfo getPhase(int dayInCycle, int cycleLengthInDays, int periodLengthInDays) {
     final ovDay = getOvulationDay(cycleLengthInDays);
     
-    if (dayInCycle <= defaultPeriodLength) {
+    if (dayInCycle <= periodLengthInDays) {
       return PhaseInfo("Menstrual", "Your period; rest and be gentle with yourself.");
     } else if (dayInCycle < ovDay - 2) {
       return PhaseInfo("Follicular", "Energy is building back up.");
@@ -57,7 +56,7 @@ class CycleMath {
     return dayInCycle == getOvulationDay(cycleLengthInDays);
   }
 
-  static bool isPredictedPeriod(DateTime date, DateTime lmp, int cycleLengthInDays) {
+  static bool isPredictedPeriod(DateTime date, DateTime lmp, int cycleLengthInDays, int periodLengthInDays) {
     final today = DateTime(AppClock.now().year, AppClock.now().month, AppClock.now().day);
     final normDate = DateTime(date.year, date.month, date.day);
     
@@ -67,7 +66,7 @@ class CycleMath {
     }
 
     final dayInCycle = getDayInCycle(lmp, normDate, cycleLengthInDays);
-    return dayInCycle >= 1 && dayInCycle <= defaultPeriodLength;
+    return dayInCycle >= 1 && dayInCycle <= periodLengthInDays;
   }
 
   static bool isRecordedPeriodDay(DateTime date, List<DayLog> allLogs) {

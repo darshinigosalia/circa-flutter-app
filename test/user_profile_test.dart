@@ -72,6 +72,7 @@ void main() {
       expect(json['cycleType'], 'periods');
       expect(json['lastPeriod'], date.toIso8601String());
       expect(json['cycleLengthInDays'], 28);
+      expect(json['periodLengthInDays'], 5);
       expect(json['showFertility'], true);
       expect(json['isPregnant'], false);
       expect(json['hormones'], <String>[]);
@@ -88,6 +89,7 @@ void main() {
           'cycleType': 'periods',
           'lastPeriod': '2026-06-28T00:00:00.000',
           'cycleLengthInDays': 28,
+          'periodLengthInDays': 5,
           'showFertility': true,
           'isPregnant': false,
           'hormones': <String>[],
@@ -102,6 +104,7 @@ void main() {
         expect(profile.cycleType, CycleType.periods);
         expect(profile.lastPeriod, DateTime.parse('2026-06-28T00:00:00.000'));
         expect(profile.cycleLengthInDays, 28);
+        expect(profile.periodLengthInDays, 5);
         expect(profile.showFertility, true);
         expect(profile.isPregnant, false);
         expect(profile.hormones, const <String>[]);
@@ -172,6 +175,7 @@ void main() {
         expect(savedJson['showFertility'], true);
         expect(savedJson['isPregnant'], false);
         expect(savedJson['cycleLengthInDays'], 28);
+        expect(savedJson['periodLengthInDays'], 5);
 
         // Unmount the widget tree to cleanly release database listeners
         await tester.pumpWidget(const SizedBox());
@@ -236,6 +240,7 @@ void main() {
         expect(savedJson['showFertility'], false);
         expect(savedJson['isPregnant'], false);
         expect(savedJson['cycleLengthInDays'], 28);
+        expect(savedJson['periodLengthInDays'], 5);
 
         // Unmount the widget tree to cleanly release database listeners
         await tester.pumpWidget(const SizedBox());

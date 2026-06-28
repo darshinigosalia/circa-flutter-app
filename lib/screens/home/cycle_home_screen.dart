@@ -62,9 +62,10 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
         
         final today = DateTime(AppClock.now().year, AppClock.now().month, AppClock.now().day);
         final cycleLengthInDays = widget.storage.profile?.cycleLengthInDays ?? 28;
+        final periodLengthInDays = widget.storage.profile?.periodLengthInDays ?? widget.data.periodLengthInDays ?? 5;
         
         final dayInCycle = CycleMath.getDayInCycle(lmp, today, cycleLengthInDays);
-        final phase = CycleMath.getPhase(dayInCycle, cycleLengthInDays);
+        final phase = CycleMath.getPhase(dayInCycle, cycleLengthInDays, periodLengthInDays);
         final nextPeriod = CycleMath.getNextPeriod(lmp, today, cycleLengthInDays);
         final showFertility = widget.data.showFertility == true && widget.storage.getSetting('remindFertileWindow', defaultValue: true) == true;
         final ovDayOffset = CycleMath.getOvulationDay(cycleLengthInDays) - 1;
@@ -160,7 +161,7 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
                       ],
                       
                       // Calendar Grid
-                      _buildCalendarGrid(lmp, cycleLengthInDays, showFertility),
+                      _buildCalendarGrid(lmp, cycleLengthInDays, periodLengthInDays, showFertility),
                       
                       const SizedBox(height: 16),
                       Center(
@@ -325,7 +326,7 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
     );
   }
 
-  Widget _buildCalendarGrid(DateTime lmp, int cycleLengthInDays, bool showFertility) {
+  Widget _buildCalendarGrid(DateTime lmp, int cycleLengthInDays, int periodLengthInDays, bool showFertility) {
     final daysInMonth = DateTime(_displayMonth.year, _displayMonth.month + 1, 0).day;
     final firstWeekday = DateTime(_displayMonth.year, _displayMonth.month, 1).weekday;
     // Weekday is 1-7 (Mon-Sun). We want Sun-Sat (0-6).
@@ -376,7 +377,7 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
             final isToday = date.isAtSameMomentAs(today);
             
             final isRecordedPeriod = CycleMath.isRecordedPeriodDay(date, allLogs);
-            final isPredicted = CycleMath.isPredictedPeriod(date, lmp, cycleLengthInDays);
+            final isPredicted = CycleMath.isPredictedPeriod(date, lmp, cycleLengthInDays, periodLengthInDays);
             final fertile = showFertility && CycleMath.isFertileWindow(date, lmp, cycleLengthInDays);
             final ovulation = showFertility && CycleMath.isOvulationDay(date, lmp, cycleLengthInDays);
 
