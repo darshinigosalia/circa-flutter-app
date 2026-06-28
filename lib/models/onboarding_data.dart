@@ -4,7 +4,7 @@ class OnboardingData {
   final CycleType? cycleType;
   final bool? isPregnant;
   final DateTime? lastPeriod;
-  final bool? isFertile;
+  final bool? showFertility;
   final List<String>? hormones;
   final Map<String, dynamic>? anchor;
   final List<String>? symptomsToTrack;
@@ -14,7 +14,7 @@ class OnboardingData {
     this.cycleType,
     this.isPregnant,
     this.lastPeriod,
-    this.isFertile,
+    this.showFertility,
     this.hormones,
     this.anchor,
     this.symptomsToTrack,
@@ -25,7 +25,7 @@ class OnboardingData {
     CycleType? cycleType,
     bool? isPregnant,
     DateTime? lastPeriod,
-    bool? isFertile,
+    bool? showFertility,
     List<String>? hormones,
     Map<String, dynamic>? anchor,
     List<String>? symptomsToTrack,
@@ -35,7 +35,7 @@ class OnboardingData {
       cycleType: cycleType ?? this.cycleType,
       isPregnant: isPregnant ?? this.isPregnant,
       lastPeriod: lastPeriod ?? this.lastPeriod,
-      isFertile: isFertile ?? this.isFertile,
+      showFertility: showFertility ?? this.showFertility,
       hormones: hormones ?? this.hormones,
       anchor: anchor ?? this.anchor,
       symptomsToTrack: symptomsToTrack ?? this.symptomsToTrack,

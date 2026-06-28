@@ -122,7 +122,7 @@ class _GestationDateScreenState extends State<GestationDateScreen> {
                     cycleType: widget.data.cycleType ?? CycleType.noPeriods,
                     isPregnant: widget.data.isPregnant ?? true,
                     lastPeriod: _selectedDate!,
-                    isFertile: widget.data.isFertile ?? false,
+                    showFertility: widget.data.showFertility ?? false,
                     cycleLengthInDays: 28,
                   );
                   await activeStorage.saveProfile(profile);

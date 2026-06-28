@@ -79,7 +79,7 @@ class _RecoveryHomeScreenState extends State<RecoveryHomeScreen> {
                                       cycleType: profile.cycleType,
                                       isPregnant: profile.isPregnant,
                                       lastPeriod: profile.lastPeriod,
-                                      isFertile: profile.isFertile,
+                                      showFertility: profile.showFertility,
                                     ),
                                   ),
                                 ),
@@ -145,7 +145,7 @@ class _RecoveryHomeScreenState extends State<RecoveryHomeScreen> {
                                     cycleType: profile.cycleType,
                                     isPregnant: profile.isPregnant,
                                     lastPeriod: profile.lastPeriod,
-                                    isFertile: profile.isFertile,
+                                    showFertility: profile.showFertility,
                                   ),
                                 ),
                               ),
@@ -222,7 +222,7 @@ class _RecoveryHomeScreenState extends State<RecoveryHomeScreen> {
         cycleType: profile?.cycleType,
         isPregnant: profile?.isPregnant,
         lastPeriod: profile?.lastPeriod,
-        isFertile: profile?.isFertile,
+        showFertility: profile?.showFertility,
       );
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

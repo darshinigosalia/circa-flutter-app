@@ -64,7 +64,7 @@ void main() {
       final profile = UserProfile(
         cycleType: CycleType.periods,
         lastPeriod: date,
-        isFertile: true,
+        showFertility: true,
       );
 
       final json = profile.toJson();
@@ -72,7 +72,7 @@ void main() {
       expect(json['cycleType'], 'periods');
       expect(json['lastPeriod'], date.toIso8601String());
       expect(json['cycleLengthInDays'], 28);
-      expect(json['isFertile'], true);
+      expect(json['showFertility'], true);
       expect(json['isPregnant'], false);
       expect(json['hormones'], <String>[]);
       expect(json['anchor'], null);
@@ -88,7 +88,7 @@ void main() {
           'cycleType': 'periods',
           'lastPeriod': '2026-06-28T00:00:00.000',
           'cycleLengthInDays': 28,
-          'isFertile': true,
+          'showFertility': true,
           'isPregnant': false,
           'hormones': <String>[],
           'anchor': null,
@@ -102,7 +102,7 @@ void main() {
         expect(profile.cycleType, CycleType.periods);
         expect(profile.lastPeriod, DateTime.parse('2026-06-28T00:00:00.000'));
         expect(profile.cycleLengthInDays, 28);
-        expect(profile.isFertile, true);
+        expect(profile.showFertility, true);
         expect(profile.isPregnant, false);
         expect(profile.hormones, const <String>[]);
         expect(profile.anchor, null);
@@ -157,7 +157,7 @@ void main() {
         final profile = testStorage.profile;
         expect(profile, isNotNull);
         expect(profile!.cycleType, CycleType.periods);
-        expect(profile.isFertile, isTrue);
+        expect(profile.showFertility, isTrue);
         expect(profile.isPregnant, isFalse);
         expect(profile.lastPeriod, isNotNull);
 
@@ -169,7 +169,7 @@ void main() {
 
         final Map<String, dynamic> savedJson = jsonDecode(savedJsonStr!);
         expect(savedJson['cycleType'], 'periods');
-        expect(savedJson['isFertile'], true);
+        expect(savedJson['showFertility'], true);
         expect(savedJson['isPregnant'], false);
         expect(savedJson['cycleLengthInDays'], 28);
 
@@ -221,7 +221,7 @@ void main() {
         final profile = testStorage.profile;
         expect(profile, isNotNull);
         expect(profile!.cycleType, CycleType.periods);
-        expect(profile.isFertile, isFalse);
+        expect(profile.showFertility, isFalse);
         expect(profile.isPregnant, isFalse);
         expect(profile.lastPeriod, isNotNull);
 
@@ -233,7 +233,7 @@ void main() {
 
         final Map<String, dynamic> savedJson = jsonDecode(savedJsonStr!);
         expect(savedJson['cycleType'], 'periods');
-        expect(savedJson['isFertile'], false);
+        expect(savedJson['showFertility'], false);
         expect(savedJson['isPregnant'], false);
         expect(savedJson['cycleLengthInDays'], 28);
 

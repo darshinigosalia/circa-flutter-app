@@ -19,7 +19,7 @@ class ForgotPeriodScreen extends StatelessWidget {
     final activeStorage = storage ?? storageService;
     final profile = UserProfile(
       cycleType: data.cycleType ?? CycleType.periods,
-      isFertile: data.isFertile ?? false,
+      showFertility: data.showFertility ?? false,
       isPregnant: data.isPregnant ?? false,
       lastPeriod: null, // intentionally null
       cycleLengthInDays: 28,
@@ -39,7 +39,7 @@ class ForgotPeriodScreen extends StatelessWidget {
     final activeStorage = storage ?? storageService;
     final profile = UserProfile(
       cycleType: data.cycleType ?? CycleType.periods,
-      isFertile: data.isFertile ?? false,
+      showFertility: data.showFertility ?? false,
       isPregnant: data.isPregnant ?? false,
       lastPeriod: null, // intentionally null
       cycleLengthInDays: 28,

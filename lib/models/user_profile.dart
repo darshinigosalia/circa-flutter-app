@@ -5,7 +5,7 @@ class UserProfile {
   final CycleType cycleType;
   final DateTime? lastPeriod;
   final int cycleLengthInDays;
-  final bool isFertile;
+  final bool showFertility;
   final bool isPregnant;
   
   // Non-pregnant / no-periods fields
@@ -19,7 +19,7 @@ class UserProfile {
     required this.cycleType,
     this.lastPeriod,
     this.cycleLengthInDays = 28,
-    required this.isFertile,
+    required this.showFertility,
     this.isPregnant = false,
     this.hormones = const [],
     this.anchor,
@@ -33,7 +33,7 @@ class UserProfile {
       'cycleType': cycleType.name,
       'lastPeriod': lastPeriod?.toIso8601String(),
       'cycleLengthInDays': cycleLengthInDays,
-      'isFertile': isFertile,
+      'showFertility': showFertility,
       'isPregnant': isPregnant,
       'hormones': hormones,
       'anchor': anchor,
@@ -51,7 +51,7 @@ class UserProfile {
       ),
       lastPeriod: json['lastPeriod'] != null ? DateTime.parse(json['lastPeriod']) : null,
       cycleLengthInDays: json['cycleLengthInDays'] ?? 28,
-      isFertile: json['isFertile'] ?? false,
+      showFertility: json['showFertility'] ?? json['isFertile'] ?? false,
       isPregnant: json['isPregnant'] ?? false,
       hormones: List<String>.from(json['hormones'] ?? []),
       anchor: json['anchor'] as Map<String, dynamic>?,
@@ -73,7 +73,7 @@ class UserProfile {
     CycleType? cycleType,
     DateTime? lastPeriod,
     int? cycleLengthInDays,
-    bool? isFertile,
+    bool? showFertility,
     bool? isPregnant,
     List<String>? hormones,
     Map<String, dynamic>? anchor,
@@ -85,7 +85,7 @@ class UserProfile {
       cycleType: cycleType ?? this.cycleType,
       lastPeriod: lastPeriod ?? this.lastPeriod,
       cycleLengthInDays: cycleLengthInDays ?? this.cycleLengthInDays,
-      isFertile: isFertile ?? this.isFertile,
+      showFertility: showFertility ?? this.showFertility,
       isPregnant: isPregnant ?? this.isPregnant,
       hormones: hormones ?? this.hormones,
       anchor: anchor ?? this.anchor,

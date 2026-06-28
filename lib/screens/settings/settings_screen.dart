@@ -134,7 +134,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       cycleType: profile.cycleType,
       lastPeriod: profile.lastPeriod,
       cycleLengthInDays: profile.cycleLengthInDays,
-      isFertile: profile.isFertile,
+      showFertility: profile.showFertility,
       isPregnant: false,
       hormones: profile.hormones,
       anchor: profile.anchor,
@@ -192,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final profile = widget.storage.profile;
-    final showFertile = profile?.isFertile ?? true;
+    final showFertility = profile?.showFertility ?? true;
     final isAlreadyPregnant = profile?.isPregnant ?? false;
 
     return Scaffold(
@@ -233,7 +233,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               setState(() => _remindNextPeriod = v);
               _saveSetting('remindNextPeriod', v);
             }),
-            if (showFertile)
+            if (showFertility)
               _buildToggleRow("Fertile window", _remindFertileWindow, (v) {
                 setState(() => _remindFertileWindow = v);
                 _saveSetting('remindFertileWindow', v);

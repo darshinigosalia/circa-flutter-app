@@ -14,11 +14,11 @@ class FertileOptInScreen extends StatelessWidget {
 
   Future<void> _completeOnboarding(BuildContext context, OnboardingData finalData) async {
     final activeStorage = storage ?? storageService;
-    if (finalData.lastPeriod != null && finalData.cycleType != null && finalData.isFertile != null) {
+    if (finalData.lastPeriod != null && finalData.cycleType != null && finalData.showFertility != null) {
       final profile = UserProfile(
         cycleType: finalData.cycleType!,
         lastPeriod: finalData.lastPeriod!,
-        isFertile: finalData.isFertile!,
+        showFertility: finalData.showFertility!,
       );
       await activeStorage.seedFromOnboarding(profile);
     }
@@ -58,14 +58,14 @@ class FertileOptInScreen extends StatelessWidget {
                 icon: Icons.spa_outlined, // Botanical placeholder
                 title: "Yes, show my fertile window",
                 subtitle: "Predict ovulation and fertile days on my calendar",
-                onTap: () => _completeOnboarding(context, data.copyWith(isFertile: true)),
+                onTap: () => _completeOnboarding(context, data.copyWith(showFertility: true)),
               ),
               const SizedBox(height: 16),
               CircaChoiceCard(
                 icon: Icons.grass_outlined, // Botanical placeholder
                 title: "No, keep it simple",
                 subtitle: "Just track my period and symptoms",
-                onTap: () => _completeOnboarding(context, data.copyWith(isFertile: false)),
+                onTap: () => _completeOnboarding(context, data.copyWith(showFertility: false)),
               ),
             ],
           ),

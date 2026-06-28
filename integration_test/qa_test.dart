@@ -43,7 +43,7 @@ void main() {
     // Use cycleType: CycleType.periods to match route_resolver.dart
     await storageService.saveProfile(UserProfile(
       cycleType: CycleType.periods,
-      isFertile: true,
+      showFertility: true,
       lastPeriod: DateTime(2024, 5, 10),
     ));
     await storageService.saveLog(DayLog(
@@ -69,7 +69,7 @@ void main() {
     AppClock.setFixedTime(baseDay);
     await storageService.saveProfile(UserProfile(
       cycleType: CycleType.periods,
-      isFertile: true,
+      showFertility: true,
       lastPeriod: baseDay,
     ));
 
@@ -97,7 +97,7 @@ void main() {
     AppClock.setFixedTime(DateTime(2024, 3, 1));
     await storageService.saveProfile(UserProfile(
       cycleType: CycleType.periods,
-      isFertile: true,
+      showFertility: true,
       lastPeriod: lmp5,
       cycleLengthInDays: 28,
     ));
@@ -113,7 +113,7 @@ void main() {
     AppClock.setFixedTime(lmp6.add(const Duration(days: 60)));
     await storageService.saveProfile(UserProfile(
       cycleType: CycleType.periods,
-      isFertile: true,
+      showFertility: true,
       lastPeriod: lmp6,
       cycleLengthInDays: 28,
     ));
@@ -129,7 +129,7 @@ void main() {
     AppClock.setFixedTime(conceptionDate);
     await storageService.saveProfile(UserProfile(
       cycleType: CycleType.noPeriods,
-      isFertile: false,
+      showFertility: false,
       isPregnant: true,
       lastPeriod: conceptionDate,
     ));
@@ -146,7 +146,7 @@ void main() {
     AppClock.setFixedTime(DateTime(2024, 6, 15));
     await storageService.saveProfile(UserProfile(
       cycleType: CycleType.periods,
-      isFertile: true,
+      showFertility: true,
       lastPeriod: DateTime(2024, 6, 1),
       cycleLengthInDays: 28,
     ));
@@ -164,7 +164,7 @@ void main() {
       cycleType: CycleType.periods,
       lastPeriod: boundaryDate,
       cycleLengthInDays: 28,
-      isFertile: true,
+      showFertility: true,
     ));
     await tester.pumpWidget(const app.CircaApp());
     await tester.pumpAndSettle();

@@ -37,7 +37,7 @@ Widget resolveHome(UserProfile? profile, [StorageService? storage]) {
         data: OnboardingData(
           cycleType: profile.cycleType,
           isPregnant: profile.isPregnant,
-          isFertile: profile.isFertile,
+          showFertility: profile.showFertility,
         ),
         storage: activeStorage,
       );
@@ -51,14 +51,14 @@ Widget resolveHome(UserProfile? profile, [StorageService? storage]) {
         data: OnboardingData(
           cycleType: profile.cycleType,
           lastPeriod: profile.lastPeriod,
-          isFertile: profile.isFertile,
+          showFertility: profile.showFertility,
         ),
       );
     } else {
       return DateEntryScreen(
         data: OnboardingData(
           cycleType: profile.cycleType,
-          isFertile: profile.isFertile,
+          showFertility: profile.showFertility,
         ),
         storage: activeStorage,
       );

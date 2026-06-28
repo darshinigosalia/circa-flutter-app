@@ -83,7 +83,7 @@ class CircaDrawer extends StatelessWidget {
                                 cycleType: profile.cycleType,
                                 isPregnant: profile.isPregnant,
                                 lastPeriod: profile.lastPeriod,
-                                isFertile: profile.isFertile,
+                                showFertility: profile.showFertility,
                               ),
                             ),
                           ),

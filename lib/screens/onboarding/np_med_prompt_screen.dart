@@ -24,7 +24,7 @@ class _NpMedPromptScreenState extends State<NpMedPromptScreen> {
     final profile = UserProfile(
       cycleType: widget.data.cycleType ?? CycleType.noPeriods,
       isPregnant: widget.data.isPregnant ?? false,
-      isFertile: widget.data.isFertile ?? false,
+      showFertility: widget.data.showFertility ?? false,
       hormones: widget.data.hormones ?? [],
       anchor: widget.data.anchor,
       symptomsToTrack: widget.data.symptomsToTrack ?? [],

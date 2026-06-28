@@ -66,7 +66,7 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
         final dayInCycle = CycleMath.getDayInCycle(lmp, today, cycleLengthInDays);
         final phase = CycleMath.getPhase(dayInCycle, cycleLengthInDays);
         final nextPeriod = CycleMath.getNextPeriod(lmp, today, cycleLengthInDays);
-        final isFertile = widget.data.isFertile == true && widget.storage.getSetting('remindFertileWindow', defaultValue: true) == true;
+        final showFertility = widget.data.showFertility == true && widget.storage.getSetting('remindFertileWindow', defaultValue: true) == true;
         final ovDayOffset = CycleMath.getOvulationDay(cycleLengthInDays) - 1;
         final ovDate = lmp.add(Duration(days: ovDayOffset));
         
@@ -160,7 +160,7 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
                       ],
                       
                       // Calendar Grid
-                      _buildCalendarGrid(lmp, cycleLengthInDays, isFertile),
+                      _buildCalendarGrid(lmp, cycleLengthInDays, showFertility),
                       
                       const SizedBox(height: 16),
                       Center(
@@ -173,7 +173,7 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
                       
                       const SizedBox(height: 24),
                       // Legend
-                      _buildLegend(isFertile),
+                      _buildLegend(showFertility),
                       
                       const SizedBox(height: 32),
                       
@@ -187,8 +187,8 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
                               "in ${CycleMath.daysBetween(today, nextPeriod)} days",
                             ),
                           ),
-                          if (isFertile) const SizedBox(width: 12),
-                          if (isFertile)
+                           if (showFertility) const SizedBox(width: 12),
+                           if (showFertility)
                             Expanded(
                               child: _buildSummaryPill(
                                 "FERTILE WINDOW",
@@ -325,7 +325,7 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
     );
   }
 
-  Widget _buildCalendarGrid(DateTime lmp, int cycleLengthInDays, bool isFertile) {
+  Widget _buildCalendarGrid(DateTime lmp, int cycleLengthInDays, bool showFertility) {
     final daysInMonth = DateTime(_displayMonth.year, _displayMonth.month + 1, 0).day;
     final firstWeekday = DateTime(_displayMonth.year, _displayMonth.month, 1).weekday;
     // Weekday is 1-7 (Mon-Sun). We want Sun-Sat (0-6).
@@ -377,8 +377,8 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
             
             final isRecordedPeriod = CycleMath.isRecordedPeriodDay(date, allLogs);
             final isPredicted = CycleMath.isPredictedPeriod(date, lmp, cycleLengthInDays);
-            final fertile = isFertile && CycleMath.isFertileWindow(date, lmp, cycleLengthInDays);
-            final ovulation = isFertile && CycleMath.isOvulationDay(date, lmp, cycleLengthInDays);
+            final fertile = showFertility && CycleMath.isFertileWindow(date, lmp, cycleLengthInDays);
+            final ovulation = showFertility && CycleMath.isOvulationDay(date, lmp, cycleLengthInDays);
 
             return Opacity(
               opacity: isFuture ? 0.55 : 1.0,
@@ -454,14 +454,14 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
     return CircaColors.ink;
   }
 
-  Widget _buildLegend(bool isFertile) {
+  Widget _buildLegend(bool showFertility) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _legendItem("Period", CircaColors.clay, null),
         const SizedBox(width: 16),
         _legendItem("Predicted", CircaColors.apricot, Border.all(color: const Color(0xFFC98A5E), width: 1.5)),
-        if (isFertile) ...[
+        if (showFertility) ...[
           const SizedBox(width: 16),
           _legendItem("Fertile", CircaColors.accentSoft, null),
           const SizedBox(width: 16),

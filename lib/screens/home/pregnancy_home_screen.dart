@@ -202,7 +202,7 @@ class _PregnancyHomeScreenState extends State<PregnancyHomeScreen> {
                                     cycleType: profile.cycleType,
                                     isPregnant: profile.isPregnant,
                                     lastPeriod: profile.lastPeriod,
-                                    isFertile: profile.isFertile,
+                                    showFertility: profile.showFertility,
                                   ),
                                 ),
                               ),
