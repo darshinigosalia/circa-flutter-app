@@ -46,3 +46,13 @@ app.*.map.json
 
 # Integration Test Screenshots
 /test/integration/screenshots/
+
+# Flutter generated
+.metadata
+.flutter-plugins
+
+# Gemini/Antigravity workspace config
+.agents/
+
+# Project task tracking (personal)
+task.md
