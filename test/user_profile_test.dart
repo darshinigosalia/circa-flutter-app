@@ -35,13 +35,7 @@ void main() {
     testCounter++;
     final suffix = '_$testCounter';
 
-    // Open boxes using a unique prefix/suffix per test to guarantee 100% isolation
-    await Hive.openBox<String>('profile$suffix');
-    await Hive.openBox<String>('logs$suffix');
-    await Hive.openBox<String>('medications$suffix');
-    await Hive.openBox<String>('appointments$suffix');
-    await Hive.openBox('settings$suffix');
-
+    // StorageService.init() opens the boxes using the suffix for isolation.
     testStorage = StorageService(boxSuffix: suffix);
     await testStorage.init();
     await testStorage.clearAllData();

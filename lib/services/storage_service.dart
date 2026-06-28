@@ -29,6 +29,13 @@ class StorageService extends ChangeNotifier {
   bool get isInitialized => _initialized;
 
   Future<void> init() async {
+    // Open all required Hive boxes (idempotent — safe to call if already open)
+    await Hive.openBox<String>(_boxLogs);
+    await Hive.openBox<String>(_boxProfile);
+    await Hive.openBox<String>(_boxMedications);
+    await Hive.openBox<String>(_boxAppointments);
+    await Hive.openBox(_boxSettings);
+
     final logsBox = Hive.box<String>(_boxLogs);
     final profileBox = Hive.box<String>(_boxProfile);
     

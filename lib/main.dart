@@ -9,17 +9,13 @@ import 'package:local_auth/local_auth.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox<String>('logs');
-  await Hive.openBox<String>('profile');
-  await Hive.openBox<String>('medications');
-  await Hive.openBox<String>('appointments');
-  await Hive.openBox<dynamic>('settings');
   await storageService.init();
   runApp(const CircaApp());
 }
 
 class CircaApp extends StatefulWidget {
-  const CircaApp({super.key});
+  final StorageService? storage;
+  const CircaApp({super.key, this.storage});
 
   @override
   State<CircaApp> createState() => _CircaAppState();
@@ -29,11 +25,13 @@ class _CircaAppState extends State<CircaApp> with WidgetsBindingObserver {
   bool _isLocked = false;
   final LocalAuthentication _localAuth = LocalAuthentication();
 
+  StorageService get _activeStorage => widget.storage ?? storageService;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    if (storageService.appLockEnabled) {
+    if (_activeStorage.appLockEnabled) {
       _isLocked = true;
       _authenticate();
     }
@@ -47,7 +45,7 @@ class _CircaAppState extends State<CircaApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (!storageService.appLockEnabled) return;
+    if (!_activeStorage.appLockEnabled) return;
     
     if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
       setState(() {
@@ -80,13 +78,13 @@ class _CircaAppState extends State<CircaApp> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: storageService,
+      listenable: _activeStorage,
       builder: (context, _) {
         return MaterialApp(
           title: 'Circa',
           theme: CircaColors.theme,
           debugShowCheckedModeBanner: false,
-          home: resolveHome(storageService.profile),
+          home: resolveHome(_activeStorage.profile, _activeStorage),
           builder: (context, child) {
             return Stack(
               children: [
