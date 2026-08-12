@@ -32,20 +32,137 @@ class TrackHubScreen extends StatefulWidget {
 
 class _TrackHubScreenState extends State<TrackHubScreen> {
   late DayLog _log;
+  late DateTime _selectedDate;
+  late ScrollController _dateScrollController;
 
   @override
   void initState() {
     super.initState();
+    _selectedDate = DateTime(widget.date.year, widget.date.month, widget.date.day);
+    _dateScrollController = ScrollController();
+
     if (widget.initialDraft != null) {
       _log = widget.initialDraft!;
     } else {
-      final existing = widget.storage.getLogForDate(widget.date);
+      final existing = widget.storage.getLogForDate(_selectedDate);
       if (existing != null) {
         _log = existing.copyWith();
       } else {
-        _log = DayLog(date: widget.date, loggedAt: AppClock.now());
+        _log = DayLog(date: _selectedDate, loggedAt: AppClock.now());
       }
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToSelectedDate(animate: false);
+    });
+  }
+
+  @override
+  void dispose() {
+    _dateScrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToSelectedDate({bool animate = true}) {
+    if (!_dateScrollController.hasClients) return;
+    final today = DateTime(AppClock.now().year, AppClock.now().month, AppClock.now().day);
+    final daysAgo = today.difference(_selectedDate).inDays;
+    final totalDays = daysAgo > 180 ? daysAgo + 30 : 180;
+    final selectedIndex = totalDays - daysAgo;
+
+    const itemWidth = 54.0;
+    final screenWidth = MediaQuery.of(context).size.width - 52.0;
+    final targetOffset = (selectedIndex * itemWidth) - (screenWidth / 2) + (itemWidth / 2);
+    final clampedOffset = targetOffset.clamp(0.0, _dateScrollController.position.maxScrollExtent);
+
+    if (animate) {
+      _dateScrollController.animateTo(
+        clampedOffset,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOutCubic,
+      );
+    } else {
+      _dateScrollController.jumpTo(clampedOffset);
+    }
+  }
+
+  Widget _buildHorizontalDateStrip() {
+    final today = DateTime(AppClock.now().year, AppClock.now().month, AppClock.now().day);
+    final daysAgo = today.difference(_selectedDate).inDays;
+    final totalDays = daysAgo > 180 ? daysAgo + 30 : 180;
+
+    return SizedBox(
+      height: 60,
+      child: ListView.builder(
+        controller: _dateScrollController,
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        itemCount: totalDays + 1,
+        itemBuilder: (context, index) {
+          final date = today.subtract(Duration(days: totalDays - index));
+          final isSelected = date.year == _selectedDate.year &&
+              date.month == _selectedDate.month &&
+              date.day == _selectedDate.day;
+
+          final dayStr = date.day.toString();
+          final monthStr = DateFormat("MMM").format(date).toUpperCase();
+
+          return GestureDetector(
+            onTap: () {
+              if (isSelected) return;
+              setState(() {
+                _selectedDate = date;
+                final existing = widget.storage.getLogForDate(date);
+                if (existing != null) {
+                  _log = existing.copyWith();
+                } else {
+                  _log = DayLog(date: date, loggedAt: AppClock.now());
+                }
+              });
+              _scrollToSelectedDate(animate: true);
+            },
+            child: Container(
+              width: 46,
+              height: 46,
+              margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: CircaColors.paper,
+                border: Border.all(
+                  color: isSelected ? CircaColors.accent : CircaColors.line,
+                  width: isSelected ? 2.5 : 1.0,
+                ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    dayStr,
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      color: isSelected ? CircaColors.ink : CircaColors.ink.withValues(alpha: 0.8),
+                      height: 1.0,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    monthStr,
+                    style: TextStyle(
+                      fontSize: 8.5,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.3,
+                      color: isSelected ? CircaColors.accent : CircaColors.muted,
+                      height: 1.0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   void _saveLog() async {
@@ -219,10 +336,10 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
   @override
   Widget build(BuildContext context) {
     final today = DateTime(AppClock.now().year, AppClock.now().month, AppClock.now().day);
-    final normDate = DateTime(widget.date.year, widget.date.month, widget.date.day);
+    final normDate = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
     final isToday = normDate.isAtSameMomentAs(today);
 
-    final title = isToday ? "What would you like to log?" : "Logging for ${DateFormat("E, MMM d").format(widget.date)}";
+    final title = isToday ? "What would you like to log?" : "Logging for ${DateFormat("E, MMM d").format(_selectedDate)}";
     final saveText = isToday ? "Save today's log" : "Save this day's log";
     
     final symptomCount = _countSymptoms();
@@ -264,8 +381,8 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (isToday) Text(DateFormat("EEEE, MMM d").format(today), style: CircaColors.eyebrow),
-                  if (isToday) const SizedBox(height: 8),
+                  _buildHorizontalDateStrip(),
+                  const SizedBox(height: 16),
                   Text(title, style: CircaColors.title),
                   const SizedBox(height: 32),
                   
@@ -369,7 +486,7 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
 
   Widget _buildPeriodButtons() {
     final lmp = widget.storage.mostRecentPeriodStart;
-    final isPeriodKnownThisCycle = lmp != null && CycleMath.daysBetween(lmp, widget.date) >= 0 && CycleMath.daysBetween(lmp, widget.date) < 30;
+    final isPeriodKnownThisCycle = lmp != null && CycleMath.daysBetween(lmp, _selectedDate) >= 0 && CycleMath.daysBetween(lmp, _selectedDate) < 30;
     
     final startedLog = _log.periodStarted;
     final endedLog = _log.periodEnded;

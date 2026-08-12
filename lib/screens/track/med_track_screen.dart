@@ -125,8 +125,8 @@ class _MedTrackScreenState extends State<MedTrackScreen> {
                         ),
                       )
                     else ...[
-                      ..._medications.map((m) => _buildMedicationRow(m)).toList(),
-                      ..._appointments.map((a) => _buildAppointmentRow(a)).toList(),
+                      ..._medications.map((m) => _buildMedicationRow(m)),
+                      ..._appointments.map((a) => _buildAppointmentRow(a)),
                     ],
                       
                     const SizedBox(height: 24),
@@ -223,7 +223,7 @@ class _MedTrackScreenState extends State<MedTrackScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: CircaColors.clay.withOpacity(0.1),
+                    color: CircaColors.clay.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(Icons.notifications_active, size: 14, color: CircaColors.clay),
@@ -289,7 +289,7 @@ class _MedTrackScreenState extends State<MedTrackScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: CircaColors.clay.withOpacity(0.1),
+                    color: CircaColors.clay.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(Icons.notifications_active, size: 14, color: CircaColors.clay),
@@ -339,7 +339,7 @@ class _MedTrackScreenState extends State<MedTrackScreen> {
       decoration: BoxDecoration(
         color: CircaColors.bg,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: CircaColors.muted.withOpacity(0.5), width: 1.5),
+        border: Border.all(color: CircaColors.muted.withValues(alpha: 0.5), width: 1.5),
       ),
       child: Center(
         child: Text(

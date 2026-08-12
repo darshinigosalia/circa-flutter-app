@@ -215,7 +215,7 @@ class _AddMedicationModalState extends State<AddMedicationModal> {
               Switch(
                 value: _isReminderEnabled,
                 onChanged: (val) => setState(() => _isReminderEnabled = val),
-                activeTrackColor: CircaColors.clay.withOpacity(0.3),
+                activeTrackColor: CircaColors.clay.withValues(alpha: 0.3),
                 activeThumbColor: CircaColors.clay,
               ),
             ],
