@@ -63,6 +63,49 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
     super.dispose();
   }
 
+  void _openCalendarPicker() async {
+    final today = DateTime(AppClock.now().year, AppClock.now().month, AppClock.now().day);
+    final initial = _selectedDate.isAfter(today) ? today : _selectedDate;
+
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: DateTime(today.year - 2, 1, 1),
+      lastDate: today,
+      selectableDayPredicate: (d) => !DateTime(d.year, d.month, d.day).isAfter(today),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: CircaColors.accent,
+              onPrimary: Colors.white,
+              surface: CircaColors.paper,
+              onSurface: CircaColors.ink,
+            ),
+            dialogTheme: const DialogThemeData(backgroundColor: CircaColors.paper),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null && mounted) {
+      final normPicked = DateTime(picked.year, picked.month, picked.day);
+      if (normPicked.isAfter(today)) return;
+
+      setState(() {
+        _selectedDate = normPicked;
+        final existing = widget.storage.getLogForDate(normPicked);
+        if (existing != null) {
+          _log = existing.copyWith();
+        } else {
+          _log = DayLog(date: normPicked, loggedAt: AppClock.now());
+        }
+      });
+      _scrollToSelectedDate(animate: true);
+    }
+  }
+
   void _scrollToSelectedDate({bool animate = true}) {
     if (!_dateScrollController.hasClients) return;
     final today = DateTime(AppClock.now().year, AppClock.now().month, AppClock.now().day);
@@ -372,6 +415,13 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.calendar_today_outlined, color: CircaColors.ink),
+            onPressed: _openCalendarPicker,
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: Column(
         children: [

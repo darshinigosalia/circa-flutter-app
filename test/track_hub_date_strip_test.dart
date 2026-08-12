@@ -49,4 +49,27 @@ void main() {
       expect(find.text('Logging for Tue, Aug 11'), findsOneWidget);
     }
   });
+
+  testWidgets('TrackHubScreen top right calendar icon opens date picker', (WidgetTester tester) async {
+    final testDate = DateTime(2026, 8, 12);
+
+    await tester.pumpWidget(MaterialApp(
+      home: TrackHubScreen(
+        date: testDate,
+        storage: storage,
+        data: OnboardingData(),
+      ),
+    ));
+    await tester.pumpAndSettle();
+
+    // Find and tap the calendar icon button on the top right
+    final calendarIconFinder = find.byIcon(Icons.calendar_today_outlined);
+    expect(calendarIconFinder, findsOneWidget);
+
+    await tester.tap(calendarIconFinder);
+    await tester.pumpAndSettle();
+
+    // Verify calendar dialog opens
+    expect(find.byType(DatePickerDialog), findsOneWidget);
+  });
 }
