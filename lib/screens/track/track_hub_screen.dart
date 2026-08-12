@@ -257,20 +257,33 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
               children: [
                 const Text("Log intercourse", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: CircaColors.ink)),
                 const SizedBox(height: 24),
-                _bottomSheetButton("With protection", () {
-                  setState(() => _log = _log.copyWith(intercourseProtected: true));
-                  Navigator.pop(context);
-                }),
+                _bottomSheetButton(
+                  "With protection", 
+                  () {
+                    setState(() => _log = _log.copyWith(intercourseProtected: true));
+                    Navigator.pop(context);
+                  },
+                  isSelected: _log.intercourseProtected == true,
+                ),
                 const SizedBox(height: 12),
-                _bottomSheetButton("Without protection", () {
-                  setState(() => _log = _log.copyWith(intercourseProtected: false));
-                  Navigator.pop(context);
-                }),
+                _bottomSheetButton(
+                  "Without protection", 
+                  () {
+                    setState(() => _log = _log.copyWith(intercourseProtected: false));
+                    Navigator.pop(context);
+                  },
+                  isSelected: _log.intercourseProtected == false,
+                ),
                 const SizedBox(height: 12),
-                _bottomSheetButton("None", () {
-                  setState(() => _log = _log.copyWith(intercourseProtected: null));
-                  Navigator.pop(context);
-                }, isGhost: true),
+                _bottomSheetButton(
+                  "None", 
+                  () {
+                    setState(() => _log = _log.copyWith(intercourseProtected: null));
+                    Navigator.pop(context);
+                  }, 
+                  isGhost: true,
+                  isSelected: _log.intercourseProtected == null,
+                ),
               ],
             ),
           ),
@@ -298,16 +311,25 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
                 ...["Morning-after pill", "Monthly pill", "IUD", "Patch", "Implant"].map((opt) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
-                    child: _bottomSheetButton(opt, () {
-                      setState(() => _log = _log.copyWith(contraceptionType: opt));
-                      Navigator.pop(context);
-                    }),
+                    child: _bottomSheetButton(
+                      opt, 
+                      () {
+                        setState(() => _log = _log.copyWith(contraceptionType: opt));
+                        Navigator.pop(context);
+                      },
+                      isSelected: _log.contraceptionType == opt,
+                    ),
                   );
                 }),
-                _bottomSheetButton("None", () {
-                  setState(() => _log = _log.copyWith(contraceptionType: null));
-                  Navigator.pop(context);
-                }, isGhost: true),
+                _bottomSheetButton(
+                  "None", 
+                  () {
+                    setState(() => _log = _log.copyWith(contraceptionType: null));
+                    Navigator.pop(context);
+                  }, 
+                  isGhost: true,
+                  isSelected: _log.contraceptionType == null,
+                ),
               ],
             ),
           ),
@@ -365,12 +387,13 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
     );
   }
 
-  Widget _bottomSheetButton(String label, VoidCallback onTap, {bool isGhost = false}) {
+  Widget _bottomSheetButton(String label, VoidCallback onTap, {bool isGhost = false, bool isSelected = false}) {
     return SizedBox(
       width: double.infinity,
       child: CircaButton(
         label: label,
         isGhost: isGhost,
+        isSelected: isSelected,
         onPressed: onTap,
       ),
     );

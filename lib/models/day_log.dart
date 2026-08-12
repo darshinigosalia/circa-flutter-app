@@ -1,3 +1,5 @@
+const Object _sentinel = Object();
+
 class CustomSymptom {
   final String name;
   final String detail;
@@ -103,36 +105,36 @@ class DayLog {
     DateTime? loggedAt,
     bool? periodStarted,
     bool? periodEnded,
-    String? bleedingFlowLevel,
-    String? bleedingFlowColour,
-    String? dischargeAmount,
-    String? dischargeColour,
+    Object? bleedingFlowLevel = _sentinel,
+    Object? bleedingFlowColour = _sentinel,
+    Object? dischargeAmount = _sentinel,
+    Object? dischargeColour = _sentinel,
     Map<String, String>? symptoms,
     List<CustomSymptom>? customSymptoms,
     String? notes,
-    bool? intercourseProtected,
-    String? contraceptionType,
+    Object? intercourseProtected = _sentinel,
+    Object? contraceptionType = _sentinel,
     bool? anomalousCycle,
-    String? anomalousReason,
-    double? basalBodyTemperature,
+    Object? anomalousReason = _sentinel,
+    Object? basalBodyTemperature = _sentinel,
   }) {
     return DayLog(
       date: date ?? this.date,
       loggedAt: loggedAt ?? this.loggedAt,
       periodStarted: periodStarted ?? this.periodStarted,
       periodEnded: periodEnded ?? this.periodEnded,
-      bleedingFlowLevel: bleedingFlowLevel ?? this.bleedingFlowLevel,
-      bleedingFlowColour: bleedingFlowColour ?? this.bleedingFlowColour,
-      dischargeAmount: dischargeAmount ?? this.dischargeAmount,
-      dischargeColour: dischargeColour ?? this.dischargeColour,
+      bleedingFlowLevel: bleedingFlowLevel == _sentinel ? this.bleedingFlowLevel : (bleedingFlowLevel as String?),
+      bleedingFlowColour: bleedingFlowColour == _sentinel ? this.bleedingFlowColour : (bleedingFlowColour as String?),
+      dischargeAmount: dischargeAmount == _sentinel ? this.dischargeAmount : (dischargeAmount as String?),
+      dischargeColour: dischargeColour == _sentinel ? this.dischargeColour : (dischargeColour as String?),
       symptoms: symptoms ?? this.symptoms,
       customSymptoms: customSymptoms ?? this.customSymptoms,
       notes: notes ?? this.notes,
-      intercourseProtected: intercourseProtected ?? this.intercourseProtected,
-      contraceptionType: contraceptionType ?? this.contraceptionType,
+      intercourseProtected: intercourseProtected == _sentinel ? this.intercourseProtected : (intercourseProtected as bool?),
+      contraceptionType: contraceptionType == _sentinel ? this.contraceptionType : (contraceptionType as String?),
       anomalousCycle: anomalousCycle ?? this.anomalousCycle,
-      anomalousReason: anomalousReason ?? this.anomalousReason,
-      basalBodyTemperature: basalBodyTemperature ?? this.basalBodyTemperature,
+      anomalousReason: anomalousReason == _sentinel ? this.anomalousReason : (anomalousReason as String?),
+      basalBodyTemperature: basalBodyTemperature == _sentinel ? this.basalBodyTemperature : (basalBodyTemperature as double?),
     );
   }
 }

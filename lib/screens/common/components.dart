@@ -5,31 +5,38 @@ class CircaButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final bool isGhost;
+  final bool isSelected;
+  final Widget? trailing;
 
   const CircaButton({
     super.key,
     required this.label,
     this.onPressed,
     this.isGhost = false,
+    this.isSelected = false,
+    this.trailing,
   });
 
   @override
   Widget build(BuildContext context) {
+    final ghostTextColor = isSelected ? CircaColors.ink : CircaColors.muted;
+    final ghostBorderColor = isSelected ? CircaColors.ink : CircaColors.line;
+
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: isGhost ? Colors.transparent : (onPressed == null ? CircaColors.muted : CircaColors.accent),
-          foregroundColor: isGhost ? CircaColors.muted : Colors.white,
+          foregroundColor: isGhost ? ghostTextColor : Colors.white,
           elevation: 0,
           shadowColor: Colors.transparent,
           disabledBackgroundColor: isGhost ? Colors.transparent : CircaColors.muted.withValues(alpha: 0.3),
           disabledForegroundColor: CircaColors.muted,
-          padding: const EdgeInsets.symmetric(vertical: 15),
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
             side: isGhost 
-                ? const BorderSide(color: CircaColors.line, width: 1.5) 
+                ? BorderSide(color: ghostBorderColor, width: isSelected ? 2.0 : 1.5) 
                 : BorderSide.none,
           ),
         ).copyWith(
@@ -41,7 +48,30 @@ class CircaButton extends StatelessWidget {
           }),
         ),
         onPressed: onPressed,
-        child: Text(label, style: CircaColors.button),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Center(
+              child: Text(
+                label,
+                style: CircaColors.button.copyWith(
+                  color: isGhost ? ghostTextColor : Colors.white,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            if (isSelected || trailing != null)
+              Positioned(
+                right: 0,
+                child: trailing ?? Icon(
+                  Icons.check,
+                  size: 20,
+                  color: isGhost ? ghostTextColor : Colors.white,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
