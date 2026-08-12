@@ -117,7 +117,8 @@ class _AddMedicationModalState extends State<AddMedicationModal> {
         color: CircaColors.paper,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      child: Column(
+      child: SingleChildScrollView(
+        child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -314,7 +315,8 @@ class _AddMedicationModalState extends State<AddMedicationModal> {
           ),
         ],
       ),
-    );
+    ),
+  );
   }
 
   Widget _buildFreqChip(String label, String value) {

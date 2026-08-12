@@ -148,115 +148,117 @@ class _AddAppointmentModalState extends State<AddAppointmentModal> {
         color: CircaColors.paper,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: CircaColors.line,
-                borderRadius: BorderRadius.circular(2),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: CircaColors.line,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(isEditing ? "Save changes" : "Add appointment", style: CircaColors.title.copyWith(fontSize: 20)),
-              IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
-          
-          TextField(
-            controller: _nameController,
-            decoration: InputDecoration(
-              labelText: "Appointment name",
-              labelStyle: const TextStyle(color: CircaColors.muted),
-              filled: true,
-              fillColor: CircaColors.bg,
-              errorText: _errorText,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(isEditing ? "Save changes" : "Add appointment", style: CircaColors.title.copyWith(fontSize: 20)),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
             ),
-          ),
-          const SizedBox(height: 16),
-          
-          Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: _pickDate,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    decoration: BoxDecoration(
-                      color: CircaColors.bg,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Text(
-                      _selectedDate != null ? DateFormat.yMMMd().format(_selectedDate!) : "Date",
-                      style: TextStyle(color: _selectedDate != null ? CircaColors.ink : CircaColors.muted, fontSize: 16),
+            const SizedBox(height: 24),
+            
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(
+                labelText: "Appointment name",
+                labelStyle: const TextStyle(color: CircaColors.muted),
+                filled: true,
+                fillColor: CircaColors.bg,
+                errorText: _errorText,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+              ),
+            ),
+            const SizedBox(height: 16),
+            
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: _pickDate,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      decoration: BoxDecoration(
+                        color: CircaColors.bg,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Text(
+                        _selectedDate != null ? DateFormat.yMMMd().format(_selectedDate!) : "Date",
+                        style: TextStyle(color: _selectedDate != null ? CircaColors.ink : CircaColors.muted, fontSize: 16),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: GestureDetector(
-                  onTap: _pickTime,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                    decoration: BoxDecoration(
-                      color: CircaColors.bg,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Text(
-                      _selectedTime != null ? _selectedTime!.format(context) : "Time (opt)",
-                      style: TextStyle(color: _selectedTime != null ? CircaColors.ink : CircaColors.muted, fontSize: 16),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: _pickTime,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      decoration: BoxDecoration(
+                        color: CircaColors.bg,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Text(
+                        _selectedTime != null ? _selectedTime!.format(context) : "Time (opt)",
+                        style: TextStyle(color: _selectedTime != null ? CircaColors.ink : CircaColors.muted, fontSize: 16),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          
-          const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text("Reminder", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-              Switch(
-                value: _isReminderEnabled,
-                onChanged: (val) => setState(() => _isReminderEnabled = val),
-                activeTrackColor: CircaColors.clay.withValues(alpha: 0.3),
-                activeThumbColor: CircaColors.clay,
-              ),
-            ],
-          ),
-          
-          const SizedBox(height: 32),
-          SizedBox(
-            width: double.infinity,
-            height: 56,
-            child: ElevatedButton(
-              onPressed: _save,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: CircaColors.accentDeep,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'HankenGrotesque'),
-              ),
-              child: Text(isEditing ? "Save changes" : "Add appointment"),
+              ],
             ),
-          ),
-        ],
+            
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text("Reminder", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                Switch(
+                  value: _isReminderEnabled,
+                  onChanged: (val) => setState(() => _isReminderEnabled = val),
+                  activeTrackColor: CircaColors.clay.withValues(alpha: 0.3),
+                  activeThumbColor: CircaColors.clay,
+                ),
+              ],
+            ),
+            
+            const SizedBox(height: 32),
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: ElevatedButton(
+                onPressed: _save,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CircaColors.accentDeep,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+                  textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, fontFamily: 'HankenGrotesque'),
+                ),
+                child: Text(isEditing ? "Save changes" : "Add appointment"),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
