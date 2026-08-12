@@ -154,22 +154,26 @@ class _StealthModeScreenState extends State<StealthModeScreen> {
             const SizedBox(height: 24),
             Text("Choose your decoy icon:", style: CircaColors.eyebrow),
             const SizedBox(height: 12),
-            Container(
-              decoration: BoxDecoration(
-                color: CircaColors.paper,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: CircaColors.line),
-              ),
-              child: Column(
-                children: [
-                  _buildIconOption('calculator', 'Calculator', Icons.calculate),
-                  const Divider(height: 1, color: CircaColors.line),
-                  _buildIconOption('notes', 'Notes', Icons.notes),
-                  const Divider(height: 1, color: CircaColors.line),
-                  _buildIconOption('weather', 'Weather', Icons.cloud),
-                  const Divider(height: 1, color: CircaColors.line),
-                  _buildIconOption('clock', 'Clock', Icons.access_time),
-                ],
+            Material(
+              color: CircaColors.paper,
+              borderRadius: BorderRadius.circular(16),
+              clipBehavior: Clip.antiAlias,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: CircaColors.line),
+                ),
+                child: Column(
+                  children: [
+                    _buildIconOption('calculator', 'Calculator', Icons.calculate),
+                    const Divider(height: 1, color: CircaColors.line),
+                    _buildIconOption('notes', 'Notes', Icons.notes),
+                    const Divider(height: 1, color: CircaColors.line),
+                    _buildIconOption('weather', 'Weather', Icons.cloud),
+                    const Divider(height: 1, color: CircaColors.line),
+                    _buildIconOption('clock', 'Clock', Icons.access_time),
+                  ],
+                ),
               ),
             ),
           ],

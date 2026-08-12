@@ -280,15 +280,19 @@ class _SymptomsSubScreenState extends State<SymptomsSubScreen> {
   Widget _buildSymptomToggle(String title, bool isExpanded, ValueChanged<bool> onChanged, String? echoValue, Widget expandedContent) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
+      child: Material(
         color: CircaColors.paper,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: CircaColors.line, width: 1.5),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
+        clipBehavior: Clip.antiAlias,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: CircaColors.line, width: 1.5),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
             title: Row(
               children: [
                 Expanded(
@@ -325,8 +329,10 @@ class _SymptomsSubScreenState extends State<SymptomsSubScreen> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  ),
+);
+}
 
   Widget _buildFlowDetails() {
     return Column(
