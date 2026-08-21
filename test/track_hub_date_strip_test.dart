@@ -19,9 +19,11 @@ void main() {
   });
 
   tearDownAll(() async {
-    await Hive.close();
+    Hive.resetAdapters();
     if (tempDir.existsSync()) {
-      tempDir.deleteSync(recursive: true);
+      try {
+        tempDir.deleteSync(recursive: true);
+      } catch (_) {}
     }
   });
 
@@ -48,6 +50,8 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Logging for Tue, Aug 11'), findsOneWidget);
     }
+
+    await tester.pumpWidget(const SizedBox());
   });
 
   testWidgets('TrackHubScreen top right calendar icon opens date picker', (WidgetTester tester) async {
@@ -71,5 +75,7 @@ void main() {
 
     // Verify calendar dialog opens
     expect(find.byType(DatePickerDialog), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox());
   });
 }

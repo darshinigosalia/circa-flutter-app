@@ -16,7 +16,7 @@ class OnboardingData {
     this.isPregnant,
     this.lastPeriod,
     this.showFertility,
-    this.periodLengthInDays = 5,
+    this.periodLengthInDays = 4,
     this.hormones,
     this.anchor,
     this.symptomsToTrack,

@@ -62,7 +62,7 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
         
         final today = DateTime(AppClock.now().year, AppClock.now().month, AppClock.now().day);
         final cycleLengthInDays = widget.storage.profile?.cycleLengthInDays ?? 28;
-        final periodLengthInDays = widget.storage.profile?.periodLengthInDays ?? widget.data.periodLengthInDays ?? 5;
+        final periodLengthInDays = widget.storage.profile?.periodLengthInDays ?? widget.data.periodLengthInDays ?? 4;
         
         final dayInCycle = CycleMath.getDayInCycle(lmp, today, cycleLengthInDays);
         final phase = CycleMath.getPhase(dayInCycle, cycleLengthInDays, periodLengthInDays);
@@ -211,7 +211,7 @@ class _CycleHomeScreenState extends State<CycleHomeScreen> {
                           border: Border.all(color: CircaColors.line, width: 1.5),
                         ),
                         child: Text(
-                          "These predictions use an average 28-day cycle/5 day period for now. Once we’ve seen 3 of your cycles, we’ll use the median of your lengths to sharpen your next-period date.",
+                          "These predictions use a 28-day cycle / 4-day period for now. Once we’ve seen 3 of your cycles, we’ll use the median of your lengths to sharpen your next-period date.",
                           style: CircaColors.helpText.copyWith(fontSize: 14),
                         ),
                       ),

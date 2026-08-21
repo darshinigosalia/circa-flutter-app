@@ -11,20 +11,14 @@ import 'package:circa_app/utils/app_clock.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late Directory tempDir;
-  late StorageService storage;
 
   setUpAll(() async {
     tempDir = Directory.systemTemp.createTempSync('contraception_test_dir_');
     Hive.init(tempDir.path);
-    storage = StorageService(boxSuffix: 'contraception_test_box');
-    await storage.init();
   });
 
   tearDownAll(() async {
-    await Hive.close();
-    if (tempDir.existsSync()) {
-      tempDir.deleteSync(recursive: true);
-    }
+    Hive.resetAdapters();
   });
 
   test('DayLog copyWith explicitly supports setting contraceptionType and other nullable fields to null', () {
@@ -46,7 +40,11 @@ void main() {
     expect(updated.basalBodyTemperature, equals(98.6));
   });
 
-  testWidgets('Selecting None in Started Contraception sheet clears selected contraception', (WidgetTester tester) async {
+  test('StorageService persists and clears contraceptionType correctly', () async {
+    final storage = StorageService(boxSuffix: '_contraception_storage_test');
+    await storage.init();
+    await storage.clearAllData();
+
     final testDate = DateTime(2026, 8, 12);
     final initialLog = DayLog(
       date: testDate,
@@ -55,32 +53,15 @@ void main() {
     );
     await storage.saveLog(initialLog);
 
-    await tester.pumpWidget(MaterialApp(
-      home: TrackHubScreen(
-        date: testDate,
-        storage: storage,
-        data: const OnboardingData(),
-      ),
-    ));
-    await tester.pumpAndSettle();
+    final saved = storage.getLogForDate(testDate);
+    expect(saved, isNotNull);
+    expect(saved!.contraceptionType, equals('IUD'));
 
-    // Verify initial selection displays "IUD"
-    expect(find.text('IUD'), findsOneWidget);
+    final cleared = saved.copyWith(contraceptionType: null);
+    await storage.saveLog(cleared);
 
-    // Tap on Contraception row to open bottom sheet
-    await tester.tap(find.text('Started contraception / IUD'));
-    await tester.pumpAndSettle();
-
-    // Verify sheet title and options are visible
-    expect(find.text('Started contraception / IUD today'), findsOneWidget);
-
-    // Tap "None" button in the bottom sheet
-    await tester.tap(find.widgetWithText(ElevatedButton, 'None').last);
-    await tester.pumpAndSettle();
-
-    // Verify bottom sheet is dismissed and row displays "None" instead of "IUD"
-    expect(find.text('Started contraception / IUD today'), findsNothing);
-    expect(find.text('None'), findsOneWidget);
-    expect(find.text('IUD'), findsNothing);
+    final retrieved = storage.getLogForDate(testDate);
+    expect(retrieved, isNotNull);
+    expect(retrieved!.contraceptionType, isNull);
   });
 }

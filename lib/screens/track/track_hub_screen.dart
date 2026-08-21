@@ -300,7 +300,7 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
       isScrollControlled: true,
       builder: (context) {
         return SafeArea(
-          child: Padding(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 26),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -557,23 +557,66 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
     );
   }
 
+  Future<void> _handlePeriodEndedTap() async {
+    final allLogs = widget.storage.getAllLogs();
+    final selNorm = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
+
+    final starts = allLogs
+        .where((l) => l.periodStarted)
+        .map((l) => DateTime(l.date.year, l.date.month, l.date.day))
+        .toList();
+    if (_log.periodStarted && !starts.any((d) => d.isAtSameMomentAs(selNorm))) {
+      starts.add(selNorm);
+    }
+    starts.sort();
+
+    final matchingStart = starts.where((s) => s.isBefore(selNorm) || s.isAtSameMomentAs(selNorm)).lastOrNull;
+
+    if (matchingStart != null) {
+      final gap = CycleMath.daysBetween(matchingStart, selNorm);
+      if (gap > 30) {
+        final confirmed = await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (ctx) => AlertDialog(
+            backgroundColor: CircaColors.paper,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            title: const Text("Confirm Period End", style: TextStyle(fontWeight: FontWeight.w600, color: CircaColors.ink)),
+            content: Text("Log bleeding for $gap days?", style: const TextStyle(fontSize: 16, color: CircaColors.ink)),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: const Text("Cancel", style: TextStyle(color: CircaColors.muted, fontWeight: FontWeight.w600)),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: const Text("Confirm", style: TextStyle(color: CircaColors.clay, fontWeight: FontWeight.w700)),
+              ),
+            ],
+          ),
+        );
+
+        if (confirmed == true && mounted) {
+          setState(() => _log = _log.copyWith(periodEnded: true));
+        }
+        return;
+      }
+    }
+
+    setState(() => _log = _log.copyWith(periodEnded: true));
+  }
+
   Widget _buildPeriodButtons() {
-    final lmp = widget.storage.mostRecentPeriodStart;
-    final isPeriodKnownThisCycle = lmp != null && CycleMath.daysBetween(lmp, _selectedDate) >= 0 && CycleMath.daysBetween(lmp, _selectedDate) < 30;
-    
     final startedLog = _log.periodStarted;
     final endedLog = _log.periodEnded;
-    
-    final disableStart = startedLog || (isPeriodKnownThisCycle && !startedLog);
-    final disableEnd = endedLog;
 
     return Row(
       children: [
         Expanded(
           child: _periodBtn(
             "Period started",
-            disableStart ? "already logged" : "tap to log",
-            disableStart,
+            startedLog ? "already logged" : "tap to log",
+            startedLog,
             () {
               setState(() => _log = _log.copyWith(periodStarted: true));
             },
@@ -583,11 +626,9 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
         Expanded(
           child: _periodBtn(
             "Period ended",
-            disableEnd ? "already logged" : "tap to log",
-            disableEnd,
-            () {
-              setState(() => _log = _log.copyWith(periodEnded: true));
-            },
+            endedLog ? "already logged" : "tap to log",
+            endedLog,
+            _handlePeriodEndedTap,
           ),
         ),
       ],

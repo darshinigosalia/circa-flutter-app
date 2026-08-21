@@ -74,22 +74,17 @@ class StorageService extends ChangeNotifier {
     if (profile.lastPeriod != null) {
       final logsBox = Hive.box<String>(_boxLogs);
       final now = AppClock.now();
+      final normalizedDate = DateTime(profile.lastPeriod!.year, profile.lastPeriod!.month, profile.lastPeriod!.day);
+      final key = dateKey(normalizedDate);
 
-      for (int i = 0; i < profile.periodLengthInDays; i++) {
-        final d = profile.lastPeriod!.add(Duration(days: i));
-        final normalizedDate = DateTime(d.year, d.month, d.day);
-        final key = dateKey(normalizedDate);
-        
-        final seedLog = DayLog(
-          date: normalizedDate,
-          loggedAt: now,
-          periodStarted: i == 0,
-          bleedingFlowLevel: 'Medium',
-        );
-        
-        _logs[key] = seedLog;
-        await logsBox.put(key, jsonEncode(seedLog.toJson()));
-      }
+      final seedLog = DayLog(
+        date: normalizedDate,
+        loggedAt: now,
+        periodStarted: true,
+      );
+
+      _logs[key] = seedLog;
+      await logsBox.put(key, jsonEncode(seedLog.toJson()));
     }
     
     notifyListeners();
@@ -111,17 +106,23 @@ class StorageService extends ChangeNotifier {
     final logsBox = Hive.box<String>(_boxLogs);
     await logsBox.put(key, jsonEncode(log.toJson()));
     
-    // Check if we need to update the profile's prediction anchor or cycle length
+    // Check if we need to update the profile's prediction anchor, cycle length, or period length
     if (_profile != null) {
-      final newLength = CycleExtractor.calculatePredictedCycleLength(getAllLogs());
+      final allLogs = getAllLogs();
+      final newCycleLength = CycleExtractor.calculatePredictedCycleLength(allLogs);
+      final newPeriodLength = CycleExtractor.calculatePredictedPeriodLength(allLogs);
       
       if (log.periodStarted && (_profile!.lastPeriod == null || normalizedDate.isAfter(_profile!.lastPeriod!))) {
         await saveProfile(_profile!.copyWith(
           lastPeriod: normalizedDate,
-          cycleLengthInDays: newLength,
+          cycleLengthInDays: newCycleLength,
+          periodLengthInDays: newPeriodLength,
         ));
-      } else if (newLength != _profile!.cycleLengthInDays) {
-        await saveProfile(_profile!.copyWith(cycleLengthInDays: newLength));
+      } else if (newCycleLength != _profile!.cycleLengthInDays || newPeriodLength != _profile!.periodLengthInDays) {
+        await saveProfile(_profile!.copyWith(
+          cycleLengthInDays: newCycleLength,
+          periodLengthInDays: newPeriodLength,
+        ));
       }
     }
     

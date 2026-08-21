@@ -20,9 +20,11 @@ void main() {
   });
 
   tearDown(() async {
-    await Hive.close();
+    Hive.resetAdapters();
     if (tempDir.existsSync()) {
-      tempDir.deleteSync(recursive: true);
+      try {
+        tempDir.deleteSync(recursive: true);
+      } catch (_) {}
     }
   });
 
