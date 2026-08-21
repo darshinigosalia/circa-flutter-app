@@ -558,6 +558,11 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
   }
 
   Future<void> _handlePeriodEndedTap() async {
+    if (_log.periodEnded) {
+      setState(() => _log = _log.copyWith(periodEnded: false));
+      return;
+    }
+
     final allLogs = widget.storage.getAllLogs();
     final selNorm = DateTime(_selectedDate.year, _selectedDate.month, _selectedDate.day);
 
@@ -606,6 +611,10 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
     setState(() => _log = _log.copyWith(periodEnded: true));
   }
 
+  void _handlePeriodStartedTap() {
+    setState(() => _log = _log.copyWith(periodStarted: !_log.periodStarted));
+  }
+
   Widget _buildPeriodButtons() {
     final startedLog = _log.periodStarted;
     final endedLog = _log.periodEnded;
@@ -617,9 +626,7 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
             "Period started",
             startedLog ? "already logged" : "tap to log",
             startedLog,
-            () {
-              setState(() => _log = _log.copyWith(periodStarted: true));
-            },
+            _handlePeriodStartedTap,
           ),
         ),
         const SizedBox(width: 12),
@@ -637,7 +644,7 @@ class _TrackHubScreenState extends State<TrackHubScreen> {
 
   Widget _periodBtn(String title, String sub, bool isLogged, VoidCallback onTap) {
     return GestureDetector(
-      onTap: isLogged ? null : onTap,
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
         decoration: BoxDecoration(

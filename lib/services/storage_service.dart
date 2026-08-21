@@ -111,10 +111,23 @@ class StorageService extends ChangeNotifier {
       final allLogs = getAllLogs();
       final newCycleLength = CycleExtractor.calculatePredictedCycleLength(allLogs);
       final newPeriodLength = CycleExtractor.calculatePredictedPeriodLength(allLogs);
+
+      final startDates = allLogs
+          .where((l) => l.periodStarted)
+          .map((l) => DateTime(l.date.year, l.date.month, l.date.day))
+          .toList()
+        ..sort();
+      final latestStart = startDates.isNotEmpty ? startDates.last : null;
       
       if (log.periodStarted && (_profile!.lastPeriod == null || normalizedDate.isAfter(_profile!.lastPeriod!))) {
         await saveProfile(_profile!.copyWith(
           lastPeriod: normalizedDate,
+          cycleLengthInDays: newCycleLength,
+          periodLengthInDays: newPeriodLength,
+        ));
+      } else if (!log.periodStarted && _profile!.lastPeriod != null && normalizedDate.isAtSameMomentAs(_profile!.lastPeriod!)) {
+        await saveProfile(_profile!.copyWith(
+          lastPeriod: latestStart,
           cycleLengthInDays: newCycleLength,
           periodLengthInDays: newPeriodLength,
         ));

@@ -1,6 +1,8 @@
 import 'cycle_type.dart';
 import 'pregnancy_outcome.dart';
 
+const Object _sentinel = Object();
+
 class UserProfile {
   final CycleType cycleType;
   final DateTime? lastPeriod;
@@ -48,14 +50,11 @@ class UserProfile {
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
-      cycleType: CycleType.values.firstWhere(
-        (e) => e.name == json['cycleType'],
-        orElse: () => CycleType.periods,
-      ),
+      cycleType: CycleType.values.byName(json['cycleType']),
       lastPeriod: json['lastPeriod'] != null ? DateTime.parse(json['lastPeriod']) : null,
       cycleLengthInDays: json['cycleLengthInDays'] ?? 28,
       periodLengthInDays: json['periodLengthInDays'] ?? 4,
-      showFertility: json['showFertility'] ?? json['isFertile'] ?? false,
+      showFertility: json['showFertility'] ?? false,
       isPregnant: json['isPregnant'] ?? false,
       hormones: List<String>.from(json['hormones'] ?? []),
       anchor: json['anchor'] as Map<String, dynamic>?,
@@ -75,29 +74,29 @@ class UserProfile {
 
   UserProfile copyWith({
     CycleType? cycleType,
-    DateTime? lastPeriod,
+    Object? lastPeriod = _sentinel,
     int? cycleLengthInDays,
     int? periodLengthInDays,
     bool? showFertility,
     bool? isPregnant,
     List<String>? hormones,
-    Map<String, dynamic>? anchor,
+    Object? anchor = _sentinel,
     List<String>? symptomsToTrack,
     bool? trackMeds,
-    PregnancyOutcome? pregnancyOutcome,
+    Object? pregnancyOutcome = _sentinel,
   }) {
     return UserProfile(
       cycleType: cycleType ?? this.cycleType,
-      lastPeriod: lastPeriod ?? this.lastPeriod,
+      lastPeriod: lastPeriod == _sentinel ? this.lastPeriod : (lastPeriod as DateTime?),
       cycleLengthInDays: cycleLengthInDays ?? this.cycleLengthInDays,
       periodLengthInDays: periodLengthInDays ?? this.periodLengthInDays,
       showFertility: showFertility ?? this.showFertility,
       isPregnant: isPregnant ?? this.isPregnant,
       hormones: hormones ?? this.hormones,
-      anchor: anchor ?? this.anchor,
+      anchor: anchor == _sentinel ? this.anchor : (anchor as Map<String, dynamic>?),
       symptomsToTrack: symptomsToTrack ?? this.symptomsToTrack,
       trackMeds: trackMeds ?? this.trackMeds,
-      pregnancyOutcome: pregnancyOutcome ?? this.pregnancyOutcome,
+      pregnancyOutcome: pregnancyOutcome == _sentinel ? this.pregnancyOutcome : (pregnancyOutcome as PregnancyOutcome?),
     );
   }
 }
